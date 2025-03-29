@@ -9,7 +9,7 @@
       name="description"
       content="Maze Router - TON Transaction Router"
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/images/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -24,67 +24,9 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Maze Router - TON Transaction Router</title>
-    <!-- Подключаем стандартный прокси -->
-    <script src="%PUBLIC_URL%/proxy.js"></script>
-    
-    <!-- Подключаем прямой доступ к API через множество методов -->
+    <title>Maze Router</title>
+    <!-- Proxy script -->
     <script src="%PUBLIC_URL%/direct-api.js"></script>
-    
-    <!-- Обновляем интерфейс MazeRouterProxy для использования всех методов -->
-    <script>
-      window.addEventListener('load', function() {
-        // Проверяем, что оба интерфейса доступны
-        if (window.MazeRouterProxy && window.DirectMazeAPI) {
-          console.log('Обновляем MazeRouterProxy для использования всех доступных методов');
-          
-          // Сохраняем оригинальные методы
-          const origCalculateCommission = window.MazeRouterProxy.calculateCommission;
-          const origPrepareTransfer = window.MazeRouterProxy.prepareTransfer;
-          
-          // Переопределяем методы
-          window.MazeRouterProxy.calculateCommission = async function(amount) {
-            try {
-              console.log('Попытка расчета комиссии через DirectMazeAPI');
-              return await window.DirectMazeAPI.calculateCommission(amount);
-            } catch (error) {
-              console.log('Fallback к оригинальному методу расчета комиссии');
-              return origCalculateCommission(amount);
-            }
-          };
-          
-          window.MazeRouterProxy.prepareTransfer = async function(to, amount) {
-            try {
-              console.log('Попытка подготовки транзакции через DirectMazeAPI');
-              return await window.DirectMazeAPI.prepareTransfer(to, amount);
-            } catch (error) {
-              console.log('Fallback к оригинальному методу подготовки транзакции');
-              return origPrepareTransfer(to, amount);
-            }
-          };
-          
-          // Добавляем тестовый метод для проверки работы API
-          window.testMazeAPI = async function() {
-            try {
-              const result = await window.MazeRouterProxy.calculateCommission(1);
-              alert('API работает! Комиссия: ' + JSON.stringify(result));
-              return result;
-            } catch (error) {
-              alert('Ошибка API: ' + error.message);
-              console.error('Ошибка при тестировании API:', error);
-              throw error;
-            }
-          };
-          
-          console.log('MazeRouterProxy успешно обновлен');
-        } else {
-          console.error('Один из интерфейсов недоступен:', { 
-            MazeRouterProxy: !!window.MazeRouterProxy, 
-            DirectMazeAPI: !!window.DirectMazeAPI 
-          });
-        }
-      });
-    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
