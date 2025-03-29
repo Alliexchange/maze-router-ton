@@ -23,8 +23,8 @@ Maze Router - это приложение для анонимного маршр
 
 1. Клонировать репозиторий:
    ```
-   git clone https://github.com/your-username/maze-router.git
-   cd maze-router
+   git clone https://github.com/Alliexchange/maze-router-ton.git
+   cd maze-router-ton
    ```
 
 2. Установить зависимости:
