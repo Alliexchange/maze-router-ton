@@ -2,6 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { TonConnectButton, useTonConnectUI } from '@tonconnect/ui-react';
 import { Address } from '@ton/core';
 
+// Определение типа для MazeRouterProxy
+declare global {
+  interface Window {
+    MazeRouterProxy?: {
+      calculateCommission: (amount: number) => Promise<any>;
+      prepareTransfer: (to: string, amount: number) => Promise<any>;
+    }
+  }
+}
+
 // API URL - локальный для разработки, или публичный для продакшн
 const API_URL = process.env.NODE_ENV === 'production' 
   ? 'https://maze-router-api.vercel.app/api' // Vercel API URL
@@ -14,6 +24,30 @@ const API_FETCH_OPTIONS = {
     headers: {
         'Content-Type': 'application/json',
         'Origin': 'https://alliexchange.github.io'
+    }
+};
+
+// Функция для использования прокси AllOrigins
+const fetchThroughProxy = async (url: string, options?: RequestInit) => {
+    console.log('Используем прокси AllOrigins для запроса:', url);
+    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+    
+    try {
+        const response = await fetch(proxyUrl);
+        if (!response.ok) {
+            throw new Error(`Ошибка прокси: ${response.status} ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        if (!data || !data.contents) {
+            throw new Error('Прокси вернул пустой ответ');
+        }
+        
+        // Распарсим содержимое ответа
+        return JSON.parse(data.contents);
+    } catch (error) {
+        console.error('Ошибка при использовании прокси:', error);
+        throw error;
     }
 };
 
@@ -86,9 +120,25 @@ const TransferForm = () => {
             }
 
             try {
-                console.log('Sending calculate commission request to:', `${API_URL}/calculate`);
+                console.log('Sending calculate commission request...');
                 
-                // Сначала пробуем GET-запрос
+                // Используем глобальный MazeRouterProxy
+                try {
+                    if (window.MazeRouterProxy) {
+                        console.log('Используем MazeRouterProxy для запроса комиссии');
+                        
+                        const data = await window.MazeRouterProxy.calculateCommission(parseFloat(amount));
+                        console.log('Commission data received through proxy:', data);
+                        setCommissionInfo(data);
+                        return;
+                    } else {
+                        console.warn('MazeRouterProxy не найден, используем стандартные методы');
+                    }
+                } catch (proxyErr) {
+                    console.warn('MazeRouterProxy failed:', proxyErr);
+                }
+                
+                // Если прокси не сработал, используем другие методы
                 try {
                     const getUrl = `${API_URL}/calculate?amount=${encodeURIComponent(amount)}`;
                     console.log('Trying GET request:', getUrl);
@@ -217,53 +267,68 @@ const TransferForm = () => {
             }
             
             // Отправляем запрос на сервер для создания транзакции
-            console.log('Preparing request for API:', {
-                from: tonConnectUI.connected ? tonConnectUI.account?.address : manualAddress,
-                to: addressString,
-                amount: amount
-            });
+            console.log('Preparing transfer request...');
             
-            // Сначала попробуем с помощью GET для совместимости с разными окружениями
-            const apiUrl = `${API_URL}/transfer?to=${encodeURIComponent(addressString)}&amount=${encodeURIComponent(amount)}`;
-            
-            console.log('Sending transfer request (GET):', apiUrl);
-            let response;
+            // Используем MazeRouterProxy
             let data;
-            
             try {
-                response = await fetch(apiUrl, {
-                    ...API_FETCH_OPTIONS
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                if (window.MazeRouterProxy) {
+                    console.log('Используем MazeRouterProxy для перевода');
+                    
+                    data = await window.MazeRouterProxy.prepareTransfer(addressString, parseFloat(amount));
+                    console.log('Transaction data received through proxy:', data);
+                } else {
+                    throw new Error('MazeRouterProxy не найден');
                 }
-                data = await response.json();
-                console.log('Received transaction data (GET):', data);
-            } catch (getErr) {
-                console.warn('GET request failed, falling back to POST:', getErr);
+            } catch (proxyErr) {
+                console.warn('MazeRouterProxy request failed:', proxyErr);
                 
-                // Если GET не сработал, пробуем POST
+                // Если прокси не сработал, возвращаемся к предыдущим методам
                 try {
-                    response = await fetch(`${API_URL}/transfer`, {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            from: tonConnectUI.connected ? tonConnectUI.account?.address : manualAddress,
-                            to: addressString,
-                            amount: amount
-                        }),
-                        ...API_FETCH_OPTIONS
-                    });
+                    const apiUrl = `${API_URL}/transfer?to=${encodeURIComponent(addressString)}&amount=${encodeURIComponent(amount)}`;
                     
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({ details: 'Ошибка при парсинге ответа' }));
-                        throw new Error(errorData.details || `HTTP error! status: ${response.status}`);
+                    console.log('Sending transfer request (GET):', apiUrl);
+                    let response;
+                    
+                    try {
+                        response = await fetch(apiUrl, {
+                            ...API_FETCH_OPTIONS
+                        });
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        data = await response.json();
+                        console.log('Received transaction data (GET):', data);
+                    } catch (getErr) {
+                        console.warn('GET request failed, falling back to POST:', getErr);
+                        
+                        // Если GET не сработал, пробуем POST
+                        try {
+                            response = await fetch(`${API_URL}/transfer`, {
+                                method: 'POST',
+                                body: JSON.stringify({
+                                    from: tonConnectUI.connected ? tonConnectUI.account?.address : manualAddress,
+                                    to: addressString,
+                                    amount: amount
+                                }),
+                                ...API_FETCH_OPTIONS
+                            });
+                            
+                            if (!response.ok) {
+                                const errorData = await response.json().catch(() => ({ details: 'Ошибка при парсинге ответа' }));
+                                throw new Error(errorData.details || `HTTP error! status: ${response.status}`);
+                            }
+                            
+                            data = await response.json();
+                            console.log('Received transaction data (POST):', data);
+                        } catch (postErr) {
+                            console.error('POST request also failed:', postErr);
+                            throw new Error('Не удалось получить данные для транзакции. Попробуйте позже.');
+                        }
                     }
-                    
-                    data = await response.json();
-                    console.log('Received transaction data (POST):', data);
-                } catch (postErr) {
-                    console.error('POST request also failed:', postErr);
-                    throw new Error('Не удалось получить данные для транзакции. Попробуйте позже.');
+                } catch (fallbackErr) {
+                    console.error('All fallback methods failed:', fallbackErr);
+                    throw new Error('Не удалось выполнить запрос к API. Пожалуйста, попробуйте позже.');
                 }
             }
             
@@ -341,6 +406,20 @@ const TransferForm = () => {
 
     const isConnected = tonConnectUI.connected || !!manualAddress;
 
+    // Функция для тестирования прокси
+    const testProxy = async () => {
+        try {
+            if (window.MazeRouterProxy) {
+                const result = await window.MazeRouterProxy.calculateCommission(1);
+                alert(`Прокси работает! Результат: ${JSON.stringify(result)}`);
+            } else {
+                alert('MazeRouterProxy не найден!');
+            }
+        } catch (err) {
+            alert(`Ошибка при тестировании прокси: ${err instanceof Error ? err.message : String(err)}`);
+        }
+    };
+
     return (
         <div className="transfer-form">
             <h2>Перевод TON</h2>
@@ -359,6 +438,7 @@ const TransferForm = () => {
                     {manualAddress && (
                         <button onClick={handleDisconnectManual} className="disconnect">Отключить ручное подключение</button>
                     )}
+                    <button onClick={testProxy} style={{ backgroundColor: '#4CAF50' }}>Проверить прокси</button>
                 </div>
             </div>
             
