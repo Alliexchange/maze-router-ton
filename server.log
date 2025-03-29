@@ -1,0 +1,1187 @@
+
+> maze-ton@0.1.0 server
+> node server/index.js
+
+Sat, 29 Mar 2025 08:23:38 GMT express:application set "x-powered-by" to true
+Sat, 29 Mar 2025 08:23:38 GMT express:application set "etag" to 'weak'
+Sat, 29 Mar 2025 08:23:38 GMT express:application set "etag fn" to [Function: generateETag]
+Sat, 29 Mar 2025 08:23:38 GMT express:application set "env" to 'development'
+Sat, 29 Mar 2025 08:23:38 GMT express:application set "query parser" to 'extended'
+Sat, 29 Mar 2025 08:23:38 GMT express:application set "query parser fn" to [Function: parseExtendedQueryString]
+Sat, 29 Mar 2025 08:23:38 GMT express:application set "subdomain offset" to 2
+Sat, 29 Mar 2025 08:23:38 GMT express:application set "trust proxy" to false
+Sat, 29 Mar 2025 08:23:38 GMT express:application set "trust proxy fn" to [Function: trustNone]
+Sat, 29 Mar 2025 08:23:38 GMT express:application booting in development mode
+Sat, 29 Mar 2025 08:23:38 GMT express:application set "view" to [Function: View]
+Sat, 29 Mar 2025 08:23:38 GMT express:application set "views" to '/Users/dmitry/maze 0.0.3/views'
+Sat, 29 Mar 2025 08:23:38 GMT express:application set "jsonp callback name" to 'callback'
+Sat, 29 Mar 2025 08:23:38 GMT express:router use '/' query
+Sat, 29 Mar 2025 08:23:38 GMT express:router:layer new '/'
+Sat, 29 Mar 2025 08:23:38 GMT express:router use '/' expressInit
+Sat, 29 Mar 2025 08:23:38 GMT express:router:layer new '/'
+Sat, 29 Mar 2025 08:23:38 GMT express:router use '/' corsMiddleware
+Sat, 29 Mar 2025 08:23:38 GMT express:router:layer new '/'
+Sat, 29 Mar 2025 08:23:38 GMT express:router use '/' jsonParser
+Sat, 29 Mar 2025 08:23:38 GMT express:router:layer new '/'
+Sat, 29 Mar 2025 08:23:38 GMT express:router use '/' serveStatic
+Sat, 29 Mar 2025 08:23:38 GMT express:router:layer new '/'
+Sat, 29 Mar 2025 08:23:38 GMT express:router use '/' serveStatic
+Sat, 29 Mar 2025 08:23:38 GMT express:router:layer new '/'
+Sat, 29 Mar 2025 08:23:38 GMT express:router:route new '/api/transfer'
+Sat, 29 Mar 2025 08:23:38 GMT express:router:layer new '/api/transfer'
+Sat, 29 Mar 2025 08:23:38 GMT express:router:route post '/api/transfer'
+Sat, 29 Mar 2025 08:23:38 GMT express:router:layer new '/'
+Sat, 29 Mar 2025 08:23:38 GMT express:router:route new '/tonconnect-manifest.json'
+Sat, 29 Mar 2025 08:23:38 GMT express:router:layer new '/tonconnect-manifest.json'
+Sat, 29 Mar 2025 08:23:38 GMT express:router:route get '/tonconnect-manifest.json'
+Sat, 29 Mar 2025 08:23:38 GMT express:router:layer new '/'
+Sat, 29 Mar 2025 08:23:38 GMT express:router:route new '*'
+Sat, 29 Mar 2025 08:23:38 GMT express:router:layer new '*'
+Sat, 29 Mar 2025 08:23:38 GMT express:router:route get '*'
+Sat, 29 Mar 2025 08:23:38 GMT express:router:layer new '/'
+Сервер запущен на порту 3001
+Sat, 29 Mar 2025 08:24:23 GMT express:router dispatching GET /
+Sat, 29 Mar 2025 08:24:23 GMT express:router query  : /
+Sat, 29 Mar 2025 08:24:23 GMT express:router expressInit  : /
+Sat, 29 Mar 2025 08:24:23 GMT express:router corsMiddleware  : /
+Sat, 29 Mar 2025 08:24:23 GMT express:router jsonParser  : /
+Sat, 29 Mar 2025 08:24:23 GMT express:router serveStatic  : /
+Sat, 29 Mar 2025 08:24:23 GMT express:router serveStatic  : /
+Sat, 29 Mar 2025 08:24:24 GMT express:router dispatching GET /favicon.ico
+Sat, 29 Mar 2025 08:24:24 GMT express:router query  : /favicon.ico
+Sat, 29 Mar 2025 08:24:24 GMT express:router expressInit  : /favicon.ico
+Sat, 29 Mar 2025 08:24:24 GMT express:router corsMiddleware  : /favicon.ico
+Sat, 29 Mar 2025 08:24:24 GMT express:router jsonParser  : /favicon.ico
+Sat, 29 Mar 2025 08:24:24 GMT express:router serveStatic  : /favicon.ico
+Sat, 29 Mar 2025 08:24:24 GMT express:router serveStatic  : /favicon.ico
+Error: ENOENT: no such file or directory, stat '/Users/dmitry/maze 0.0.3/build/index.html'
+Sat, 29 Mar 2025 08:28:53 GMT express:router dispatching GET /tonconnect-manifest.json
+Sat, 29 Mar 2025 08:28:53 GMT express:router query  : /tonconnect-manifest.json
+Sat, 29 Mar 2025 08:28:53 GMT express:router expressInit  : /tonconnect-manifest.json
+Sat, 29 Mar 2025 08:28:53 GMT express:router corsMiddleware  : /tonconnect-manifest.json
+Sat, 29 Mar 2025 08:28:53 GMT express:router jsonParser  : /tonconnect-manifest.json
+Sat, 29 Mar 2025 08:28:53 GMT express:router serveStatic  : /tonconnect-manifest.json
+Sat, 29 Mar 2025 08:31:06 GMT express:router dispatching GET /
+Sat, 29 Mar 2025 08:31:06 GMT express:router query  : /
+Sat, 29 Mar 2025 08:31:06 GMT express:router expressInit  : /
+Sat, 29 Mar 2025 08:31:06 GMT express:router corsMiddleware  : /
+Sat, 29 Mar 2025 08:31:06 GMT express:router jsonParser  : /
+Sat, 29 Mar 2025 08:31:06 GMT express:router serveStatic  : /
+Sat, 29 Mar 2025 08:31:06 GMT express:router serveStatic  : /
+Sat, 29 Mar 2025 08:31:08 GMT express:router dispatching GET /
+Sat, 29 Mar 2025 08:31:08 GMT express:router query  : /
+Sat, 29 Mar 2025 08:31:08 GMT express:router expressInit  : /
+Sat, 29 Mar 2025 08:31:08 GMT express:router corsMiddleware  : /
+Sat, 29 Mar 2025 08:31:08 GMT express:router jsonParser  : /
+Sat, 29 Mar 2025 08:31:08 GMT express:router serveStatic  : /
+Sat, 29 Mar 2025 08:31:08 GMT express:router serveStatic  : /
+Sat, 29 Mar 2025 08:31:11 GMT express:router dispatching GET /
+Sat, 29 Mar 2025 08:31:11 GMT express:router query  : /
+Sat, 29 Mar 2025 08:31:11 GMT express:router expressInit  : /
+Sat, 29 Mar 2025 08:31:11 GMT express:router corsMiddleware  : /
+Sat, 29 Mar 2025 08:31:11 GMT express:router jsonParser  : /
+Sat, 29 Mar 2025 08:31:11 GMT express:router serveStatic  : /
+Sat, 29 Mar 2025 08:31:11 GMT express:router serveStatic  : /
+Sat, 29 Mar 2025 08:31:41 GMT express:router dispatching GET /
+Sat, 29 Mar 2025 08:31:41 GMT express:router query  : /
+Sat, 29 Mar 2025 08:31:41 GMT express:router expressInit  : /
+Sat, 29 Mar 2025 08:31:41 GMT express:router corsMiddleware  : /
+Sat, 29 Mar 2025 08:31:41 GMT express:router jsonParser  : /
+Sat, 29 Mar 2025 08:31:41 GMT express:router serveStatic  : /
+Sat, 29 Mar 2025 08:31:41 GMT express:router serveStatic  : /
+Sat, 29 Mar 2025 08:32:34 GMT express:router dispatching GET /
+Sat, 29 Mar 2025 08:32:34 GMT express:router query  : /
+Sat, 29 Mar 2025 08:32:34 GMT express:router expressInit  : /
+Sat, 29 Mar 2025 08:32:34 GMT express:router corsMiddleware  : /
+Sat, 29 Mar 2025 08:32:34 GMT express:router jsonParser  : /
+Sat, 29 Mar 2025 08:32:34 GMT express:router serveStatic  : /
+Sat, 29 Mar 2025 08:32:34 GMT express:router serveStatic  : /
+Sat, 29 Mar 2025 09:08:23 GMT express:router dispatching GET /
+Sat, 29 Mar 2025 09:08:23 GMT express:router query  : /
+Sat, 29 Mar 2025 09:08:23 GMT express:router expressInit  : /
+Sat, 29 Mar 2025 09:08:23 GMT express:router corsMiddleware  : /
+Sat, 29 Mar 2025 09:08:23 GMT express:router jsonParser  : /
+Sat, 29 Mar 2025 09:08:23 GMT express:router serveStatic  : /
+Sat, 29 Mar 2025 09:08:23 GMT express:router dispatching GET /static/css/main.036076a6.css
+Sat, 29 Mar 2025 09:08:23 GMT express:router query  : /static/css/main.036076a6.css
+Sat, 29 Mar 2025 09:08:23 GMT express:router expressInit  : /static/css/main.036076a6.css
+Sat, 29 Mar 2025 09:08:23 GMT express:router corsMiddleware  : /static/css/main.036076a6.css
+Sat, 29 Mar 2025 09:08:23 GMT express:router jsonParser  : /static/css/main.036076a6.css
+Sat, 29 Mar 2025 09:08:23 GMT express:router serveStatic  : /static/css/main.036076a6.css
+Sat, 29 Mar 2025 09:08:23 GMT express:router dispatching GET /static/js/main.716e91ea.js
+Sat, 29 Mar 2025 09:08:23 GMT express:router query  : /static/js/main.716e91ea.js
+Sat, 29 Mar 2025 09:08:23 GMT express:router expressInit  : /static/js/main.716e91ea.js
+Sat, 29 Mar 2025 09:08:23 GMT express:router corsMiddleware  : /static/js/main.716e91ea.js
+Sat, 29 Mar 2025 09:08:23 GMT express:router jsonParser  : /static/js/main.716e91ea.js
+Sat, 29 Mar 2025 09:08:23 GMT express:router serveStatic  : /static/js/main.716e91ea.js
+Sat, 29 Mar 2025 09:08:24 GMT express:router dispatching GET /static/css/main.036076a6.css.map
+Sat, 29 Mar 2025 09:08:24 GMT express:router query  : /static/css/main.036076a6.css.map
+Sat, 29 Mar 2025 09:08:24 GMT express:router expressInit  : /static/css/main.036076a6.css.map
+Sat, 29 Mar 2025 09:08:24 GMT express:router corsMiddleware  : /static/css/main.036076a6.css.map
+Sat, 29 Mar 2025 09:08:24 GMT express:router jsonParser  : /static/css/main.036076a6.css.map
+Sat, 29 Mar 2025 09:08:24 GMT express:router serveStatic  : /static/css/main.036076a6.css.map
+Sat, 29 Mar 2025 09:08:24 GMT express:router dispatching GET /static/js/main.716e91ea.js.map
+Sat, 29 Mar 2025 09:08:24 GMT express:router query  : /static/js/main.716e91ea.js.map
+Sat, 29 Mar 2025 09:08:24 GMT express:router expressInit  : /static/js/main.716e91ea.js.map
+Sat, 29 Mar 2025 09:08:24 GMT express:router corsMiddleware  : /static/js/main.716e91ea.js.map
+Sat, 29 Mar 2025 09:08:24 GMT express:router jsonParser  : /static/js/main.716e91ea.js.map
+Sat, 29 Mar 2025 09:08:24 GMT express:router serveStatic  : /static/js/main.716e91ea.js.map
+[2025-03-29T09:09:16.019Z] Запуск сервера...
+[2025-03-29T09:09:16.028Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:09:16.028Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:09:16.034Z] Ошибка сервера: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[2025-03-29T09:09:16.034Z] Порт занят, пробуем другой порт...
+[2025-03-29T09:09:16.035Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:09:16.035Z] Сервер слушает порт 63019
+[2025-03-29T09:09:56.432Z] Запуск сервера...
+[2025-03-29T09:09:56.436Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:09:56.436Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:09:56.438Z] Ошибка сервера: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[2025-03-29T09:09:56.438Z] Порт занят, пробуем другой порт...
+[2025-03-29T09:09:56.439Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:09:56.439Z] Сервер слушает порт 63215
+[2025-03-29T09:10:00.333Z] Запуск сервера...
+[2025-03-29T09:10:00.337Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:10:00.337Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:10:00.339Z] Ошибка сервера: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[2025-03-29T09:10:00.339Z] Порт занят, пробуем другой порт...
+[2025-03-29T09:10:00.339Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:10:00.339Z] Сервер слушает порт 63232
+[2025-03-29T09:10:19.083Z] Запуск сервера...
+[2025-03-29T09:10:19.087Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:10:19.087Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:10:19.089Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:10:19.089Z] Сервер слушает порт 3001
+[2025-03-29T09:10:24.371Z] GET /
+[2025-03-29T09:10:24.392Z] GET /static/js/main.716e91ea.js
+[2025-03-29T09:10:24.395Z] GET /static/css/main.036076a6.css
+[2025-03-29T09:10:24.416Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T09:10:24.434Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T09:10:38.209Z] GET /
+[2025-03-29T09:10:38.224Z] GET /static/css/main.036076a6.css
+[2025-03-29T09:10:38.226Z] GET /static/js/main.716e91ea.js
+[2025-03-29T09:10:38.248Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T09:10:38.262Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T09:10:38.272Z] GET /favicon.ico
+[2025-03-29T09:10:38.273Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T09:11:31.381Z] Запуск сервера...
+[2025-03-29T09:11:31.385Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:11:31.385Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:11:31.387Z] Ошибка сервера: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[2025-03-29T09:11:31.387Z] Порт занят, пробуем другой порт...
+[2025-03-29T09:11:31.388Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:11:31.388Z] Сервер слушает порт 63645
+[2025-03-29T09:12:10.885Z] Запуск сервера...
+[2025-03-29T09:12:10.889Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:12:10.889Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:12:10.892Z] Ошибка сервера: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[2025-03-29T09:12:10.892Z] Порт занят, пробуем другой порт...
+[2025-03-29T09:12:10.892Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:12:10.892Z] Сервер слушает порт 63824
+[2025-03-29T09:12:14.731Z] Запуск сервера...
+[2025-03-29T09:12:14.735Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:12:14.735Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:12:14.737Z] Ошибка сервера: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[2025-03-29T09:12:14.737Z] Порт занят, пробуем другой порт...
+[2025-03-29T09:12:14.737Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:12:14.737Z] Сервер слушает порт 63841
+[2025-03-29T09:12:24.168Z] Запуск сервера...
+[2025-03-29T09:12:24.171Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:12:24.171Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:12:24.174Z] Ошибка сервера: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[2025-03-29T09:12:24.174Z] Порт занят, пробуем другой порт...
+[2025-03-29T09:12:24.174Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:12:24.174Z] Сервер слушает порт 63878
+[2025-03-29T09:12:51.854Z] GET /
+[2025-03-29T09:12:51.887Z] GET /static/js/main.716e91ea.js
+[2025-03-29T09:12:51.888Z] GET /static/css/main.036076a6.css
+[2025-03-29T09:12:51.916Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T09:12:51.923Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T09:12:51.930Z] GET /favicon.ico
+[2025-03-29T09:12:51.932Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T09:13:29.943Z] Запуск сервера...
+[2025-03-29T09:13:29.949Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:13:29.949Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:13:29.952Z] Ошибка сервера: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[2025-03-29T09:13:29.952Z] Порт занят, пробуем другой порт...
+[2025-03-29T09:13:29.953Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:13:29.953Z] Сервер слушает порт 64197
+[2025-03-29T09:14:03.462Z] Запуск сервера...
+[2025-03-29T09:14:03.466Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:14:03.466Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:14:03.468Z] Ошибка сервера: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[2025-03-29T09:14:03.468Z] Порт занят, пробуем другой порт...
+[2025-03-29T09:14:03.469Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:14:03.469Z] Сервер слушает порт 64364
+[2025-03-29T09:14:40.288Z] Запуск сервера...
+[2025-03-29T09:14:40.292Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:14:40.292Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:14:40.294Z] Ошибка сервера: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[2025-03-29T09:14:40.294Z] Порт занят, пробуем другой порт...
+[2025-03-29T09:14:40.295Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:14:40.295Z] Сервер слушает порт 64540
+[2025-03-29T09:14:44.314Z] Запуск сервера...
+[2025-03-29T09:14:44.317Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:14:44.317Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:14:44.319Z] Ошибка сервера: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[2025-03-29T09:14:44.319Z] Порт занят, пробуем другой порт...
+[2025-03-29T09:14:44.320Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:14:44.320Z] Сервер слушает порт 64563
+[2025-03-29T09:14:57.587Z] Запуск сервера...
+[2025-03-29T09:14:57.590Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:14:57.590Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:14:57.592Z] Ошибка сервера: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[2025-03-29T09:14:57.592Z] Порт занят, пробуем другой порт...
+[2025-03-29T09:14:57.593Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:14:57.593Z] Сервер слушает порт 64631
+[2025-03-29T09:15:04.853Z] GET /
+[2025-03-29T09:15:04.869Z] GET /static/js/main.716e91ea.js
+[2025-03-29T09:15:04.871Z] GET /static/css/main.036076a6.css
+[2025-03-29T09:15:04.885Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T09:15:04.907Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T09:15:04.923Z] GET /favicon.ico
+[2025-03-29T09:15:04.923Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T09:15:51.015Z] Запуск сервера...
+[2025-03-29T09:15:51.019Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:15:51.019Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:15:51.022Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:15:51.022Z] Сервер слушает порт 3001
+[2025-03-29T09:16:31.756Z] Запуск сервера...
+[2025-03-29T09:16:31.759Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:16:31.760Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:16:31.762Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:16:31.762Z] Сервер слушает порт 3001
+[2025-03-29T09:16:35.662Z] Запуск сервера...
+[2025-03-29T09:16:35.666Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:16:35.666Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:16:35.668Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:16:35.668Z] Сервер слушает порт 3001
+[2025-03-29T09:16:47.212Z] Запуск сервера...
+[2025-03-29T09:16:47.216Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:16:47.216Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:16:47.218Z] Ошибка сервера: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[2025-03-29T09:16:47.218Z] Порт занят, пробуем другой порт...
+[2025-03-29T09:16:47.218Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:16:47.218Z] Сервер слушает порт 65119
+[2025-03-29T09:16:56.414Z] GET /
+[2025-03-29T09:16:56.424Z] GET /static/css/main.036076a6.css
+[2025-03-29T09:16:56.427Z] GET /static/js/main.716e91ea.js
+[2025-03-29T09:16:56.451Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T09:16:56.461Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T09:16:56.473Z] GET /favicon.ico
+[2025-03-29T09:16:56.474Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T09:18:04.233Z] Запуск сервера...
+[2025-03-29T09:18:04.238Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:18:04.238Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:18:04.241Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:18:04.241Z] Сервер слушает порт 3001
+[2025-03-29T09:18:40.336Z] Запуск сервера...
+[2025-03-29T09:18:40.343Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:18:40.343Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:18:40.349Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:18:40.349Z] Сервер слушает порт 3001
+[2025-03-29T09:18:44.584Z] Запуск сервера...
+[2025-03-29T09:18:44.587Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:18:44.587Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:18:44.590Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:18:44.590Z] Сервер слушает порт 3001
+[2025-03-29T09:19:01.020Z] Запуск сервера...
+[2025-03-29T09:19:01.024Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:19:01.024Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:19:01.026Z] Ошибка сервера: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[2025-03-29T09:19:01.026Z] Порт занят, пробуем другой порт...
+[2025-03-29T09:19:01.027Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:19:01.027Z] Сервер слушает порт 49368
+[2025-03-29T09:20:12.679Z] Запуск сервера...
+[2025-03-29T09:20:12.683Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:20:12.683Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:20:12.685Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:20:12.686Z] Сервер слушает порт 3001
+[2025-03-29T09:20:45.063Z] Запуск сервера...
+[2025-03-29T09:20:45.067Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:20:45.067Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:20:45.069Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:20:45.069Z] Сервер слушает порт 3001
+[2025-03-29T09:21:11.361Z] Запуск сервера...
+[2025-03-29T09:21:11.365Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:21:11.365Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:21:11.367Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:21:11.367Z] Сервер слушает порт 3001
+[2025-03-29T09:21:15.258Z] Запуск сервера...
+[2025-03-29T09:21:15.261Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:21:15.261Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:21:15.264Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:21:15.264Z] Сервер слушает порт 3001
+[2025-03-29T09:21:27.809Z] Запуск сервера...
+[2025-03-29T09:21:27.812Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:21:27.812Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:21:27.815Z] Ошибка сервера: listen EADDRINUSE: address already in use 0.0.0.0:3001
+[2025-03-29T09:21:27.815Z] Порт занят, пробуем случайный порт...
+[2025-03-29T09:21:27.815Z] Сервер успешно запущен на порту 0
+[2025-03-29T09:22:41.739Z] Запуск сервера...
+[2025-03-29T09:22:41.742Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:22:41.742Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:22:41.745Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:23:02.004Z] Запуск сервера...
+[2025-03-29T09:23:02.007Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:23:02.007Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:23:02.010Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:23:27.984Z] GET /
+[2025-03-29T09:23:28.062Z] GET /static/css/main.036076a6.css
+[2025-03-29T09:23:28.063Z] GET /static/js/main.716e91ea.js
+[2025-03-29T09:23:28.080Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T09:23:28.099Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T09:23:28.147Z] GET /favicon.ico
+[2025-03-29T09:23:28.149Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T09:24:11.822Z] Запуск сервера...
+[2025-03-29T09:24:11.826Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:24:11.826Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:24:11.828Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:24:11.828Z] Сервер успешно запущен на порту 50835
+[2025-03-29T09:24:11.828Z] Откройте http://localhost:50835 в браузере
+[2025-03-29T09:24:33.437Z] Запуск сервера...
+[2025-03-29T09:24:33.441Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:24:33.441Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:24:33.443Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:24:33.443Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T09:25:19.382Z] GET /
+[2025-03-29T09:25:19.392Z] GET /static/js/main.716e91ea.js
+[2025-03-29T09:25:19.394Z] GET /static/css/main.036076a6.css
+[2025-03-29T09:25:19.427Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T09:25:19.427Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T09:25:19.444Z] GET /favicon.ico
+[2025-03-29T09:25:19.447Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T09:25:22.334Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T09:25:22.335Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T09:25:22.336Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T09:25:22.337Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T09:25:22.335Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T09:25:22.337Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T09:25:22.335Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T09:25:22.342Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T09:25:33.160Z] Запуск сервера...
+[2025-03-29T09:25:33.163Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:25:33.163Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:25:33.166Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:25:33.166Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T09:25:38.026Z] GET /
+[2025-03-29T09:25:38.037Z] GET /static/js/main.716e91ea.js
+[2025-03-29T09:25:38.039Z] GET /static/css/main.036076a6.css
+[2025-03-29T09:25:38.060Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T09:25:38.066Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T09:25:38.074Z] GET /favicon.ico
+[2025-03-29T09:25:38.076Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T09:26:46.058Z] Запуск сервера...
+[2025-03-29T09:26:46.062Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:26:46.062Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:26:46.064Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:26:46.065Z] Сервер успешно запущен на порту 51563
+[2025-03-29T09:26:46.065Z] Откройте http://localhost:51563 в браузере
+[2025-03-29T09:27:38.494Z] Запуск сервера...
+[2025-03-29T09:27:38.498Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:27:38.498Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:27:38.500Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:27:38.501Z] Сервер успешно запущен на порту 51805
+[2025-03-29T09:27:38.501Z] Откройте http://localhost:51805 в браузере
+[2025-03-29T09:27:43.153Z] Запуск сервера...
+[2025-03-29T09:27:43.156Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:27:43.156Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:27:43.159Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:27:43.159Z] Сервер успешно запущен на порту 51827
+[2025-03-29T09:27:43.159Z] Откройте http://localhost:51827 в браузере
+[2025-03-29T09:27:55.763Z] Запуск сервера...
+[2025-03-29T09:27:55.766Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:27:55.766Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:27:55.769Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:27:55.769Z] Сервер успешно запущен на порту 51880
+[2025-03-29T09:27:55.769Z] Откройте http://localhost:51880 в браузере
+[2025-03-29T09:28:46.599Z] GET /
+[2025-03-29T09:28:46.618Z] GET /static/css/main.036076a6.css
+[2025-03-29T09:28:46.621Z] GET /static/js/main.716e91ea.js
+[2025-03-29T09:28:46.644Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T09:28:46.658Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T09:28:46.672Z] GET /favicon.ico
+[2025-03-29T09:28:46.674Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T09:28:49.081Z] GET /
+[2025-03-29T09:28:49.089Z] GET /static/js/main.716e91ea.js
+[2025-03-29T09:28:49.090Z] GET /static/css/main.036076a6.css
+[2025-03-29T09:28:49.129Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T09:28:49.130Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T09:28:49.140Z] GET /favicon.ico
+[2025-03-29T09:28:49.141Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T09:29:28.868Z] GET /
+[2025-03-29T09:29:28.881Z] GET /static/js/main.716e91ea.js
+[2025-03-29T09:29:28.882Z] GET /static/css/main.036076a6.css
+[2025-03-29T09:29:28.903Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T09:29:28.918Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T09:29:28.926Z] GET /favicon.ico
+[2025-03-29T09:29:28.926Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T09:32:39.415Z] Запуск сервера...
+[2025-03-29T09:32:39.418Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:32:39.418Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:32:39.420Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:32:39.421Z] Сервер успешно запущен на порту 53131
+[2025-03-29T09:32:39.421Z] Откройте http://localhost:53131 в браузере
+[2025-03-29T09:34:40.897Z] GET /tonconnect-manifest.json
+[2025-03-29T09:36:23.708Z] Запуск сервера...
+[2025-03-29T09:36:23.716Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:36:23.717Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:36:23.723Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:36:23.724Z] Сервер успешно запущен на порту 54149
+[2025-03-29T09:36:23.724Z] Откройте http://localhost:54149 в браузере
+[2025-03-29T09:36:24.420Z] Запуск сервера...
+[2025-03-29T09:36:24.433Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:36:24.433Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:36:24.441Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:36:24.445Z] Сервер успешно запущен на порту 54181
+[2025-03-29T09:36:24.446Z] Откройте http://localhost:54181 в браузере
+[2025-03-29T09:36:24.701Z] Запуск сервера...
+[2025-03-29T09:36:24.708Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:36:24.708Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:36:24.713Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:36:24.714Z] Сервер успешно запущен на порту 54185
+[2025-03-29T09:36:24.714Z] Откройте http://localhost:54185 в браузере
+[2025-03-29T09:37:31.489Z] GET /tonconnect-manifest.json
+[2025-03-29T09:37:41.758Z] Запуск сервера...
+[2025-03-29T09:37:41.762Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:37:41.762Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:37:41.765Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:37:41.765Z] Сервер успешно запущен на порту 54560
+[2025-03-29T09:37:41.765Z] Откройте http://localhost:54560 в браузере
+[2025-03-29T09:37:45.944Z] Запуск сервера...
+[2025-03-29T09:37:45.947Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:37:45.947Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:37:45.950Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:37:45.950Z] Сервер успешно запущен на порту 54577
+[2025-03-29T09:37:45.950Z] Откройте http://localhost:54577 в браузере
+[2025-03-29T09:37:46.719Z] Запуск сервера...
+[2025-03-29T09:37:46.723Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:37:46.723Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:37:46.727Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:37:46.728Z] Сервер успешно запущен на порту 54582
+[2025-03-29T09:37:46.728Z] Откройте http://localhost:54582 в браузере
+[2025-03-29T09:37:46.811Z] Запуск сервера...
+[2025-03-29T09:37:46.814Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:37:46.815Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:37:46.817Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:37:46.817Z] Сервер успешно запущен на порту 54583
+[2025-03-29T09:37:46.817Z] Откройте http://localhost:54583 в браузере
+[2025-03-29T09:37:49.985Z] Запуск сервера...
+[2025-03-29T09:37:49.988Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:37:49.988Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:37:49.991Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:37:49.991Z] Сервер успешно запущен на порту 54596
+[2025-03-29T09:37:49.992Z] Откройте http://localhost:54596 в браузере
+[2025-03-29T09:37:50.099Z] Запуск сервера...
+[2025-03-29T09:37:50.102Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:37:50.102Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:37:50.104Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:37:50.105Z] Сервер успешно запущен на порту 54601
+[2025-03-29T09:37:50.105Z] Откройте http://localhost:54601 в браузере
+[2025-03-29T09:38:04.743Z] GET /
+[2025-03-29T09:38:04.808Z] GET /static/js/main.716e91ea.js
+[2025-03-29T09:38:04.809Z] GET /static/css/main.036076a6.css
+[2025-03-29T09:38:04.949Z] GET /favicon.ico
+[2025-03-29T09:38:04.950Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T09:38:35.275Z] Получен сигнал SIGINT, закрываем сервер...
+[2025-03-29T09:38:48.909Z] Запуск сервера...
+[2025-03-29T09:38:48.912Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:38:48.912Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:38:48.914Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:38:48.915Z] Сервер успешно запущен на порту 54854
+[2025-03-29T09:38:48.915Z] Откройте http://localhost:54854 в браузере
+[2025-03-29T09:39:00.764Z] Запуск сервера...
+[2025-03-29T09:39:00.767Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:39:00.767Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:39:00.769Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:39:00.770Z] Сервер успешно запущен на порту 54903
+[2025-03-29T09:39:00.770Z] Откройте http://localhost:54903 в браузере
+[2025-03-29T09:39:04.663Z] Запуск сервера...
+[2025-03-29T09:39:04.666Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:39:04.666Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:39:04.668Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:39:04.669Z] Сервер успешно запущен на порту 54920
+[2025-03-29T09:39:04.669Z] Откройте http://localhost:54920 в браузере
+[2025-03-29T09:39:04.782Z] Запуск сервера...
+[2025-03-29T09:39:04.786Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:39:04.786Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:39:04.788Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:39:04.789Z] Сервер успешно запущен на порту 54921
+[2025-03-29T09:39:04.789Z] Откройте http://localhost:54921 в браузере
+[2025-03-29T09:39:31.527Z] GET /
+[2025-03-29T09:39:31.540Z] GET /static/js/main.716e91ea.js
+[2025-03-29T09:39:31.542Z] GET /static/css/main.036076a6.css
+[2025-03-29T09:39:31.589Z] GET /favicon.ico
+[2025-03-29T09:39:31.590Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T09:41:06.299Z] Запуск сервера...
+[2025-03-29T09:41:06.303Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:41:06.304Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:41:06.307Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:41:06.307Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T09:41:30.114Z] Запуск сервера...
+[2025-03-29T09:41:30.118Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:41:30.118Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:41:30.121Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:41:30.121Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T09:41:42.717Z] Запуск сервера...
+[2025-03-29T09:41:42.721Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:41:42.721Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:41:42.724Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:41:42.724Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T09:41:47.805Z] Запуск сервера...
+[2025-03-29T09:41:47.810Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:41:47.810Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:41:47.812Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:41:47.812Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T09:41:47.805Z] Запуск сервера...
+[2025-03-29T09:41:47.810Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:41:47.810Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:41:47.812Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:41:47.812Z] Сервер успешно запущен на порту 55656
+[2025-03-29T09:41:47.812Z] Откройте http://localhost:55656 в браузере
+[2025-03-29T09:42:52.090Z] Запуск сервера...
+[2025-03-29T09:42:52.093Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:42:52.093Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:42:52.096Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:42:52.096Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T09:42:52.241Z] Запуск сервера...
+[2025-03-29T09:42:52.244Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:42:52.244Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:42:52.247Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:42:52.247Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T09:43:03.911Z] Запуск сервера...
+[2025-03-29T09:43:03.914Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:43:03.914Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:43:03.916Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:43:03.916Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T09:43:05.526Z] Запуск сервера...
+[2025-03-29T09:43:05.530Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:43:05.530Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:43:05.533Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:43:05.533Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T09:43:26.582Z] Запуск сервера...
+[2025-03-29T09:43:26.585Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:43:26.585Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:43:26.588Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:43:26.588Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T09:43:31.373Z] Запуск сервера...
+[2025-03-29T09:43:31.377Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:43:31.377Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:43:31.379Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:43:31.379Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T09:43:31.394Z] Запуск сервера...
+[2025-03-29T09:43:31.398Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:43:31.398Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:43:31.400Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T09:43:31.401Z] Сервер успешно запущен на порту 56129
+[2025-03-29T09:43:31.401Z] Откройте http://localhost:56129 в браузере
+[2025-03-29T09:55:00.823Z] GET /
+[2025-03-29T09:55:00.929Z] GET /static/js/main.f5813916.js
+[2025-03-29T09:55:00.931Z] GET /static/css/main.036076a6.css
+[2025-03-29T09:58:42.857Z] Запуск сервера...
+[2025-03-29T09:58:42.861Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:58:42.861Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:58:42.863Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:58:42.863Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T09:59:50.880Z] Запуск сервера...
+[2025-03-29T09:59:50.884Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T09:59:50.884Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T09:59:50.887Z] Сервер успешно запущен на порту 3001
+[2025-03-29T09:59:50.887Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T10:03:31.937Z] GET /
+[2025-03-29T10:03:31.981Z] GET /static/css/main.036076a6.css
+[2025-03-29T10:03:31.985Z] GET /static/js/main.f5813916.js
+[2025-03-29T10:10:36.712Z] Запуск сервера...
+[2025-03-29T10:10:36.717Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:10:36.717Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:10:36.721Z] Сервер успешно запущен на порту 3001
+[2025-03-29T10:10:36.721Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T10:10:36.910Z] Запуск сервера...
+[2025-03-29T10:10:36.914Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:10:36.914Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:10:36.917Z] Сервер успешно запущен на порту 3001
+[2025-03-29T10:10:36.917Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T10:10:37.967Z] Запуск сервера...
+[2025-03-29T10:10:37.973Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:10:37.973Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:10:37.977Z] Сервер успешно запущен на порту 3001
+[2025-03-29T10:10:37.977Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T10:10:48.966Z] Запуск сервера...
+[2025-03-29T10:10:48.970Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:10:48.970Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:10:48.973Z] Сервер успешно запущен на порту 3001
+[2025-03-29T10:10:48.973Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T10:12:02.483Z] Запуск сервера...
+[2025-03-29T10:12:02.487Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:12:02.487Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:12:02.489Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T10:12:02.490Z] Сервер успешно запущен на порту 63406
+[2025-03-29T10:12:02.490Z] Откройте http://localhost:63406 в браузере
+[2025-03-29T10:12:33.967Z] Запуск сервера...
+[2025-03-29T10:12:33.971Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:12:33.971Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:12:33.974Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T10:12:33.974Z] Сервер успешно запущен на порту 63586
+[2025-03-29T10:12:33.974Z] Откройте http://localhost:63586 в браузере
+[2025-03-29T10:13:33.666Z] GET /
+[2025-03-29T10:13:33.812Z] GET /static/css/main.036076a6.css
+[2025-03-29T10:13:33.815Z] GET /static/js/main.f5813916.js
+[2025-03-29T10:14:26.306Z] Запуск сервера...
+[2025-03-29T10:14:26.309Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:14:26.309Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:14:26.313Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T10:14:26.314Z] Сервер успешно запущен на порту 64068
+[2025-03-29T10:14:26.314Z] Откройте http://localhost:64068 в браузере
+[2025-03-29T10:14:26.395Z] Запуск сервера...
+[2025-03-29T10:14:26.399Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:14:26.399Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:14:26.401Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T10:14:26.402Z] Сервер успешно запущен на порту 64069
+[2025-03-29T10:14:26.402Z] Откройте http://localhost:64069 в браузере
+[2025-03-29T10:15:59.058Z] Запуск сервера...
+[2025-03-29T10:15:59.061Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:15:59.061Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:15:59.064Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T10:15:59.064Z] Сервер успешно запущен на порту 64500
+[2025-03-29T10:15:59.064Z] Откройте http://localhost:64500 в браузере
+[2025-03-29T10:16:54.946Z] Запуск сервера...
+[2025-03-29T10:16:54.949Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:16:54.949Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:16:54.951Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T10:16:54.952Z] Сервер успешно запущен на порту 64748
+[2025-03-29T10:16:54.952Z] Откройте http://localhost:64748 в браузере
+[2025-03-29T10:17:09.542Z] Запуск сервера...
+[2025-03-29T10:17:09.546Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:17:09.546Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:17:09.548Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T10:17:09.549Z] Сервер успешно запущен на порту 64807
+[2025-03-29T10:17:09.549Z] Откройте http://localhost:64807 в браузере
+[2025-03-29T10:17:15.570Z] Запуск сервера...
+[2025-03-29T10:17:15.575Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:17:15.575Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:17:15.577Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T10:17:15.578Z] Сервер успешно запущен на порту 64844
+[2025-03-29T10:17:15.578Z] Откройте http://localhost:64844 в браузере
+[2025-03-29T10:17:15.570Z] Запуск сервера...
+[2025-03-29T10:17:15.575Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:17:15.575Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:17:15.577Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T10:17:15.578Z] Сервер успешно запущен на порту 64843
+[2025-03-29T10:17:15.578Z] Откройте http://localhost:64843 в браузере
+[2025-03-29T10:23:00.345Z] Запуск сервера...
+[2025-03-29T10:23:00.349Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:23:00.349Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:23:00.351Z] Сервер успешно запущен на порту 3001
+[2025-03-29T10:23:00.351Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T10:24:01.130Z] Запуск сервера...
+[2025-03-29T10:24:01.134Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:24:01.134Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:24:01.137Z] Сервер успешно запущен на порту 3001
+[2025-03-29T10:24:01.137Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T10:24:55.159Z] Запуск сервера...
+[2025-03-29T10:24:55.162Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:24:55.162Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:24:55.165Z] Сервер успешно запущен на порту 3001
+[2025-03-29T10:24:55.165Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T10:24:59.933Z] Запуск сервера...
+[2025-03-29T10:24:59.937Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:24:59.937Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:24:59.940Z] Сервер успешно запущен на порту 3001
+[2025-03-29T10:24:59.940Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T10:24:59.953Z] Запуск сервера...
+[2025-03-29T10:24:59.957Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:24:59.957Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:24:59.959Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T10:24:59.960Z] Сервер успешно запущен на порту 50514
+[2025-03-29T10:24:59.960Z] Откройте http://localhost:50514 в браузере
+[2025-03-29T10:26:16.082Z] Запуск сервера...
+[2025-03-29T10:26:16.086Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:26:16.086Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:26:16.089Z] Сервер успешно запущен на порту 3001
+[2025-03-29T10:26:16.089Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T10:27:06.766Z] GET /
+[2025-03-29T10:27:06.815Z] GET /static/css/main.036076a6.css
+[2025-03-29T10:27:06.815Z] GET /static/js/main.716e91ea.js
+[2025-03-29T10:27:06.893Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T10:27:06.901Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T10:27:06.946Z] GET /favicon.ico
+[2025-03-29T10:27:06.947Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T10:30:52.209Z] GET /
+[2025-03-29T10:30:52.287Z] GET /static/css/main.036076a6.css
+[2025-03-29T10:30:52.288Z] GET /static/js/main.716e91ea.js
+[2025-03-29T10:30:52.353Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T10:30:52.353Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T10:30:52.397Z] GET /favicon.ico
+[2025-03-29T10:30:52.405Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T10:33:02.529Z] Запуск сервера...
+[2025-03-29T10:33:02.538Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:33:02.538Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:33:02.543Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T10:33:02.544Z] Сервер успешно запущен на порту 52636
+[2025-03-29T10:33:02.544Z] Откройте http://localhost:52636 в браузере
+[2025-03-29T10:34:24.949Z] Запуск сервера...
+[2025-03-29T10:34:24.953Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:34:24.953Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:34:24.956Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T10:34:24.956Z] Сервер успешно запущен на порту 53048
+[2025-03-29T10:34:24.956Z] Откройте http://localhost:53048 в браузере
+[2025-03-29T10:34:28.968Z] Запуск сервера...
+[2025-03-29T10:34:28.972Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:34:28.972Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:34:28.974Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T10:34:28.975Z] Сервер успешно запущен на порту 53065
+[2025-03-29T10:34:28.975Z] Откройте http://localhost:53065 в браузере
+[2025-03-29T10:34:28.987Z] Запуск сервера...
+[2025-03-29T10:34:28.990Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:34:28.990Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:34:28.992Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T10:34:28.993Z] Сервер успешно запущен на порту 53066
+[2025-03-29T10:34:28.993Z] Откройте http://localhost:53066 в браузере
+[2025-03-29T10:40:24.264Z] GET /
+[2025-03-29T10:40:24.363Z] GET /static/css/main.036076a6.css
+[2025-03-29T10:40:24.364Z] GET /static/js/main.716e91ea.js
+[2025-03-29T10:40:24.442Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T10:40:24.484Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T10:40:24.537Z] GET /favicon.ico
+[2025-03-29T10:40:24.542Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T10:41:19.192Z] Запуск сервера...
+[2025-03-29T10:41:19.201Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:41:19.201Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:41:19.206Z] Сервер успешно запущен на порту 3001
+[2025-03-29T10:41:19.206Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T10:41:54.300Z] Запуск сервера...
+[2025-03-29T10:41:54.304Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:41:54.304Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:41:54.307Z] Сервер успешно запущен на порту 3001
+[2025-03-29T10:41:54.307Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T10:41:59.198Z] Запуск сервера...
+[2025-03-29T10:41:59.201Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:41:59.201Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:41:59.204Z] Сервер успешно запущен на порту 3001
+[2025-03-29T10:41:59.204Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T10:41:59.224Z] Запуск сервера...
+[2025-03-29T10:41:59.228Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T10:41:59.228Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T10:41:59.231Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T10:41:59.231Z] Сервер успешно запущен на порту 54989
+[2025-03-29T10:41:59.231Z] Откройте http://localhost:54989 в браузере
+[2025-03-29T13:08:05.106Z] GET /
+[2025-03-29T13:08:05.162Z] GET /static/css/main.036076a6.css
+[2025-03-29T13:08:05.162Z] GET /static/js/main.716e91ea.js
+[2025-03-29T13:08:05.277Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T13:08:05.278Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T13:08:05.355Z] GET /favicon.ico
+[2025-03-29T13:08:05.367Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T13:22:25.781Z] Запуск сервера...
+[2025-03-29T13:22:25.785Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:22:25.785Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:22:25.788Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:22:25.788Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:22:25.934Z] Запуск сервера...
+[2025-03-29T13:22:25.937Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:22:25.937Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:22:25.940Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:22:25.940Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:22:51.777Z] Запуск сервера...
+[2025-03-29T13:22:51.781Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:22:51.781Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:22:51.783Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:22:51.783Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:22:56.501Z] Запуск сервера...
+[2025-03-29T13:22:56.504Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:22:56.504Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:22:56.507Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:22:56.507Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:22:56.529Z] Запуск сервера...
+[2025-03-29T13:22:56.533Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:22:56.533Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:22:56.535Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T13:22:56.536Z] Сервер успешно запущен на порту 64802
+[2025-03-29T13:22:56.536Z] Откройте http://localhost:64802 в браузере
+[2025-03-29T13:23:09.143Z] GET /
+[2025-03-29T13:23:09.188Z] GET /static/css/main.036076a6.css
+[2025-03-29T13:23:09.189Z] GET /favicon.ico
+[2025-03-29T13:23:09.189Z] GET /static/js/main.716e91ea.js
+[2025-03-29T13:23:09.191Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T13:30:09.002Z] GET /
+[2025-03-29T13:30:09.057Z] GET /static/js/main.716e91ea.js
+[2025-03-29T13:30:09.066Z] GET /static/css/main.036076a6.css
+[2025-03-29T13:30:09.130Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T13:30:09.130Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T13:30:09.169Z] GET /favicon.ico
+[2025-03-29T13:30:09.176Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T13:31:38.167Z] Запуск сервера...
+[2025-03-29T13:31:38.179Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:31:38.179Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:31:38.187Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:31:38.187Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:33:20.813Z] GET /
+[2025-03-29T13:33:20.915Z] GET /static/css/main.036076a6.css
+[2025-03-29T13:33:20.919Z] GET /static/js/main.716e91ea.js
+[2025-03-29T13:33:39.025Z] GET /
+[2025-03-29T13:33:39.033Z] GET /static/js/main.716e91ea.js
+[2025-03-29T13:33:39.036Z] GET /static/css/main.036076a6.css
+[2025-03-29T13:33:39.107Z] GET /favicon.ico
+[2025-03-29T13:33:39.115Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T13:33:44.144Z] GET /
+[2025-03-29T13:33:44.183Z] GET /static/js/main.716e91ea.js
+[2025-03-29T13:33:44.184Z] GET /static/css/main.036076a6.css
+[2025-03-29T13:33:44.257Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T13:33:44.257Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T13:33:44.294Z] GET /favicon.ico
+[2025-03-29T13:33:44.298Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T13:35:27.497Z] Запуск сервера...
+[2025-03-29T13:35:27.500Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:35:27.500Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:35:27.504Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:35:27.504Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:35:31.538Z] Запуск сервера...
+[2025-03-29T13:35:31.542Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:35:31.542Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:35:31.545Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:35:31.545Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:35:31.538Z] Запуск сервера...
+[2025-03-29T13:35:31.542Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:35:31.542Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:35:31.545Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T13:35:31.545Z] Сервер успешно запущен на порту 51652
+[2025-03-29T13:35:31.545Z] Откройте http://localhost:51652 в браузере
+[2025-03-29T13:35:40.408Z] GET /
+[2025-03-29T13:35:40.505Z] GET /static/css/main.036076a6.css
+[2025-03-29T13:35:40.507Z] GET /static/js/main.716e91ea.js
+[2025-03-29T13:39:45.777Z] Запуск сервера...
+[2025-03-29T13:39:45.781Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:39:45.781Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:39:45.783Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:39:45.783Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:40:12.852Z] Запуск сервера...
+[2025-03-29T13:40:12.856Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:40:12.856Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:40:12.859Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:40:12.859Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:40:16.891Z] Запуск сервера...
+[2025-03-29T13:40:16.895Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:40:16.895Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:40:16.897Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:40:16.897Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:40:16.914Z] Запуск сервера...
+[2025-03-29T13:40:16.917Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:40:16.917Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:40:16.920Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T13:40:16.920Z] Сервер успешно запущен на порту 52870
+[2025-03-29T13:40:16.920Z] Откройте http://localhost:52870 в браузере
+[2025-03-29T13:43:32.573Z] Запуск сервера...
+[2025-03-29T13:43:32.577Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:43:32.577Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:43:32.579Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:43:32.579Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:43:32.720Z] Запуск сервера...
+[2025-03-29T13:43:32.724Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:43:32.724Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:43:32.726Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:43:32.726Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:43:45.116Z] Запуск сервера...
+[2025-03-29T13:43:45.120Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:43:45.120Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:43:45.122Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:43:45.122Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:43:45.241Z] Запуск сервера...
+[2025-03-29T13:43:45.245Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:43:45.245Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:43:45.248Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:43:45.248Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:44:06.289Z] Запуск сервера...
+[2025-03-29T13:44:06.292Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:44:06.292Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:44:06.295Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:44:06.295Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:44:11.053Z] Запуск сервера...
+[2025-03-29T13:44:11.056Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:44:11.056Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:44:11.059Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:44:11.059Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:44:11.080Z] Запуск сервера...
+[2025-03-29T13:44:11.084Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:44:11.084Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:44:11.086Z] Порт 3001 занят, пробуем случайный порт...
+[2025-03-29T13:44:11.087Z] Сервер успешно запущен на порту 53899
+[2025-03-29T13:44:11.087Z] Откройте http://localhost:53899 в браузере
+[2025-03-29T13:44:44.262Z] GET /
+[2025-03-29T13:44:44.300Z] GET /static/js/main.f5813916.js
+[2025-03-29T13:44:44.301Z] GET /static/css/main.036076a6.css
+[2025-03-29T13:44:44.365Z] GET /static/js/main.f5813916.js.map
+[2025-03-29T13:44:44.366Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T13:44:44.395Z] GET /favicon.ico
+[2025-03-29T13:44:44.413Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T13:47:25.170Z] Запуск сервера...
+[2025-03-29T13:47:25.173Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:47:25.173Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:47:25.176Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:47:25.176Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:48:37.036Z] Запуск сервера...
+[2025-03-29T13:48:37.040Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:48:37.040Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:48:37.042Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:48:37.042Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:48:51.755Z] Запуск сервера...
+[2025-03-29T13:48:51.758Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:48:51.758Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:48:51.761Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:48:51.761Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:48:55.721Z] Запуск сервера...
+[2025-03-29T13:48:55.725Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:48:55.725Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:48:55.727Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:48:55.727Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:56:22.558Z] Запуск сервера...
+[2025-03-29T13:56:22.562Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:56:22.562Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:56:22.565Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:56:22.565Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:56:23.513Z] Запуск сервера...
+[2025-03-29T13:56:23.517Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:56:23.517Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:56:23.520Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:56:23.520Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:56:49.780Z] Запуск сервера...
+[2025-03-29T13:56:49.784Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:56:49.784Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:56:49.786Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:56:49.786Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T13:56:54.418Z] Запуск сервера...
+[2025-03-29T13:56:54.422Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T13:56:54.422Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T13:56:54.424Z] Сервер успешно запущен на порту 3001
+[2025-03-29T13:56:54.424Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:00:53.597Z] GET /
+[2025-03-29T14:00:53.637Z] GET /static/js/main.f5813916.js
+[2025-03-29T14:00:53.638Z] GET /static/css/main.036076a6.css
+[2025-03-29T14:00:53.696Z] GET /static/js/main.f5813916.js.map
+[2025-03-29T14:00:53.697Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T14:00:53.731Z] GET /favicon.ico
+[2025-03-29T14:00:53.745Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T14:04:31.594Z] Запуск сервера...
+[2025-03-29T14:04:31.602Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:04:31.602Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:04:31.605Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:04:31.605Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:05:09.590Z] Запуск сервера...
+[2025-03-29T14:05:09.593Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:05:09.593Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:05:09.596Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:05:09.596Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:05:13.381Z] Запуск сервера...
+[2025-03-29T14:05:13.385Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:05:13.385Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:05:13.387Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:05:13.387Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:09:27.384Z] Запуск сервера...
+[2025-03-29T14:09:27.388Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:09:27.388Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:09:27.390Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:09:27.390Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:09:50.767Z] Запуск сервера...
+[2025-03-29T14:09:50.770Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:09:50.770Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:09:50.772Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:09:50.772Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:09:54.591Z] Запуск сервера...
+[2025-03-29T14:09:54.595Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:09:54.595Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:09:54.597Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:09:54.597Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:10:18.479Z] GET /
+[2025-03-29T14:10:18.501Z] GET /static/css/main.036076a6.css
+[2025-03-29T14:10:18.502Z] GET /static/js/main.f5813916.js
+[2025-03-29T14:10:18.623Z] GET /favicon.ico
+[2025-03-29T14:10:18.625Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T14:10:26.334Z] GET /
+[2025-03-29T14:10:26.347Z] GET /static/css/main.036076a6.css
+[2025-03-29T14:10:26.348Z] GET /static/js/main.f5813916.js
+[2025-03-29T14:10:26.388Z] GET /static/js/main.f5813916.js.map
+[2025-03-29T14:10:26.389Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T14:10:26.414Z] GET /favicon.ico
+[2025-03-29T14:10:26.416Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T14:12:04.103Z] Запуск сервера...
+[2025-03-29T14:12:04.106Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:12:04.106Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:12:04.109Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:12:04.109Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:12:07.495Z] GET /
+[2025-03-29T14:12:07.510Z] GET /static/js/main.f5813916.js
+[2025-03-29T14:12:07.512Z] GET /static/css/main.036076a6.css
+[2025-03-29T14:12:07.549Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T14:12:07.565Z] GET /static/js/main.f5813916.js.map
+[2025-03-29T14:12:07.579Z] GET /favicon.ico
+[2025-03-29T14:12:07.583Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T14:12:16.726Z] Запуск сервера...
+[2025-03-29T14:12:16.729Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:12:16.729Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:12:16.732Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:12:16.732Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:12:20.132Z] GET /
+[2025-03-29T14:12:20.151Z] GET /favicon.ico
+[2025-03-29T14:12:20.152Z] Запрошен маршрут /favicon.ico, отдаю index.html: /Users/dmitry/maze 0.0.3/build/index.html
+[2025-03-29T14:12:20.152Z] ОШИБКА: index.html не найден
+[2025-03-29T14:12:20.522Z] Запуск сервера...
+[2025-03-29T14:12:20.526Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:12:20.526Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:12:20.529Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:12:20.529Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:13:13.401Z] Запуск сервера...
+[2025-03-29T14:13:13.405Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:13:13.405Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:13:13.408Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:13:13.408Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:13:26.542Z] Запуск сервера...
+[2025-03-29T14:13:26.546Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:13:26.546Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:13:26.549Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:13:26.549Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:13:33.545Z] Запуск сервера...
+[2025-03-29T14:13:33.550Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:13:33.550Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:13:33.552Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:13:33.552Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:16:40.028Z] GET /
+[2025-03-29T14:16:40.071Z] GET /static/js/main.716e91ea.js
+[2025-03-29T14:16:40.072Z] GET /static/css/main.036076a6.css
+[2025-03-29T14:16:40.135Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T14:16:40.136Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T14:17:48.787Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T14:17:48.787Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T14:17:48.787Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T14:17:48.787Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T14:17:48.787Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T14:17:48.787Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T14:17:48.787Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T14:17:48.787Z] Получен сигнал SIGTERM, закрываем сервер...
+[2025-03-29T14:31:15.616Z] Запуск сервера...
+[2025-03-29T14:31:15.621Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:31:15.621Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:31:15.623Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:31:15.623Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:31:56.409Z] GET /
+[2025-03-29T14:31:56.435Z] GET /static/js/main.716e91ea.js
+[2025-03-29T14:31:56.436Z] GET /static/css/main.036076a6.css
+[2025-03-29T14:31:56.495Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T14:31:56.496Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T14:33:37.687Z] Запуск сервера...
+[2025-03-29T14:33:37.690Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:33:37.690Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:33:37.694Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:33:37.694Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:54:22.554Z] Запуск сервера...
+[2025-03-29T14:54:22.559Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:54:22.559Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:54:22.562Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:54:22.562Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:55:18.086Z] GET /
+[2025-03-29T14:55:18.113Z] GET /static/css/main.036076a6.css
+[2025-03-29T14:55:18.116Z] GET /static/js/main.716e91ea.js
+[2025-03-29T14:55:18.166Z] GET /static/js/main.716e91ea.js.map
+[2025-03-29T14:55:18.169Z] GET /static/css/main.036076a6.css.map
+[2025-03-29T14:57:09.330Z] Запуск сервера...
+[2025-03-29T14:57:09.334Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:57:09.334Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:57:09.336Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:57:09.336Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:59:16.122Z] Запуск сервера...
+[2025-03-29T14:59:16.125Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T14:59:16.126Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T14:59:16.128Z] Сервер успешно запущен на порту 3001
+[2025-03-29T14:59:16.128Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T14:59:37.014Z] GET /
+[2025-03-29T14:59:37.031Z] GET /static/js/main.9a40a59d.js
+[2025-03-29T14:59:37.033Z] GET /static/css/main.ea7c7900.css
+[2025-03-29T15:04:07.405Z] Запуск сервера...
+[2025-03-29T15:04:07.408Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T15:04:07.408Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T15:04:07.411Z] Сервер успешно запущен на порту 3001
+[2025-03-29T15:04:07.411Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T15:08:51.595Z] Запуск сервера...
+[2025-03-29T15:08:51.599Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T15:08:51.599Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T15:08:51.602Z] Сервер успешно запущен на порту 3001
+[2025-03-29T15:08:51.602Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T15:09:18.087Z] GET /
+[2025-03-29T15:09:18.114Z] GET /static/js/main.9a40a59d.js
+[2025-03-29T15:09:18.117Z] GET /static/css/main.ea7c7900.css
+[2025-03-29T15:14:15.916Z] Запуск сервера...
+[2025-03-29T15:14:15.920Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T15:14:15.920Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T15:14:15.923Z] Сервер успешно запущен на порту 3001
+[2025-03-29T15:14:15.923Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T15:15:46.596Z] Запуск сервера...
+[2025-03-29T15:15:46.600Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T15:15:46.600Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T15:15:46.603Z] Сервер успешно запущен на порту 3001
+[2025-03-29T15:15:46.603Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T15:21:08.401Z] Запуск сервера...
+[2025-03-29T15:21:08.404Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T15:21:08.404Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T15:21:08.407Z] Сервер успешно запущен на порту 3001
+[2025-03-29T15:21:08.407Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T15:22:19.027Z] Запуск сервера...
+[2025-03-29T15:22:19.030Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T15:22:19.030Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T15:22:19.033Z] Сервер успешно запущен на порту 3001
+[2025-03-29T15:22:19.033Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T15:24:34.455Z] GET /
+[2025-03-29T15:24:34.515Z] GET /static/js/main.9a40a59d.js
+[2025-03-29T15:24:34.516Z] GET /static/css/main.ea7c7900.css
+[2025-03-29T15:38:51.903Z] GET /
+[2025-03-29T15:38:51.952Z] GET /static/css/main.ea7c7900.css
+[2025-03-29T15:38:51.952Z] GET /static/js/main.9a40a59d.js
+[2025-03-29T15:42:56.008Z] POST /api/transaction
+[2025-03-29T15:46:08.836Z] Запуск сервера...
+[2025-03-29T15:46:08.840Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T15:46:08.840Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T15:46:08.843Z] Сервер успешно запущен на порту 3001
+[2025-03-29T15:46:08.844Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T15:52:36.481Z] Запуск сервера...
+[2025-03-29T15:52:36.485Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T15:52:36.485Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T15:52:36.487Z] Сервер успешно запущен на порту 3001
+[2025-03-29T15:52:36.487Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T15:54:15.543Z] GET /
+[2025-03-29T15:54:15.659Z] GET /static/js/main.469d7938.js
+[2025-03-29T15:54:15.662Z] GET /static/css/main.ea7c7900.css
+[2025-03-29T15:59:56.616Z] Запуск сервера...
+[2025-03-29T15:59:56.620Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T15:59:56.620Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T15:59:56.623Z] Сервер успешно запущен на порту 3001
+[2025-03-29T15:59:56.623Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T16:01:43.961Z] GET /
+[2025-03-29T16:01:44.002Z] GET /static/css/main.ba11a469.css
+[2025-03-29T16:01:44.003Z] GET /static/js/main.469d7938.js
+[2025-03-29T16:03:54.403Z] GET /tonconnect-manifest.json
+[2025-03-29T16:05:14.530Z] Запуск сервера...
+[2025-03-29T16:05:14.534Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T16:05:14.534Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T16:05:14.537Z] Сервер успешно запущен на порту 3001
+[2025-03-29T16:05:14.537Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T16:05:24.201Z] GET /
+[2025-03-29T16:05:24.237Z] GET /static/js/main.469d7938.js
+[2025-03-29T16:05:24.238Z] GET /static/css/main.ba11a469.css
+[2025-03-29T16:08:28.322Z] Запуск сервера...
+[2025-03-29T16:08:28.326Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T16:08:28.326Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T16:08:28.329Z] Сервер успешно запущен на порту 3001
+[2025-03-29T16:08:28.329Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T16:08:35.714Z] GET /
+[2025-03-29T16:08:35.765Z] GET /static/js/main.469d7938.js
+[2025-03-29T16:08:35.767Z] GET /static/css/main.337f855b.css
+[2025-03-29T16:10:27.971Z] Запуск сервера...
+[2025-03-29T16:10:27.976Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T16:10:27.976Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T16:10:27.982Z] Сервер успешно запущен на порту 3001
+[2025-03-29T16:10:27.982Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T16:21:05.480Z] Запуск сервера...
+[2025-03-29T16:21:05.484Z] Проверка директории build: /Users/dmitry/maze 0.0.3/build
+[2025-03-29T16:21:05.484Z] Проверка директории public: /Users/dmitry/maze 0.0.3/public
+[2025-03-29T16:21:05.487Z] Сервер успешно запущен на порту 3001
+[2025-03-29T16:21:05.487Z] Откройте http://localhost:3001 в браузере
+[2025-03-29T16:22:42.535Z] GET /
+[2025-03-29T16:22:42.590Z] GET /static/css/main.cadde412.css
+[2025-03-29T16:22:42.592Z] GET /static/js/main.469d7938.js

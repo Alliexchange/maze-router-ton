@@ -1,7 +1,7 @@
 {
   "url": "http://localhost:3001",
   "name": "Maze Router",
-  "iconUrl": "https://raw.githubusercontent.com/ton-blockchain/ton/master/ton-logo.png",
+  "iconUrl": "https://raw.githubusercontent.com/ton-org/blueprint/main/tonconnect/logo.png",
   "termsOfUseUrl": "https://raw.githubusercontent.com/ton-blockchain/ton/master/LICENSE",
   "privacyPolicyUrl": "https://raw.githubusercontent.com/ton-blockchain/ton/master/LICENSE",
   "items": [
@@ -10,7 +10,7 @@
       "required": true
     }
   ],
-  "aboutUrl": "https://raw.githubusercontent.com/ton-blockchain/ton/master/README.md",
+  "aboutUrl": "https://github.com/ton-org/blueprint",
   "appVersion": "0.0.3",
   "manifestVersion": "0.3",
   "configVersion": "1",
