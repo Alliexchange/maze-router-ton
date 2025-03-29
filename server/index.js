@@ -30,10 +30,10 @@ const PORT = process.env.PORT || 3001;
 
 // Настройка CORS для разных окружений
 const corsOptions = {
-  origin: ['https://alliexchange.github.io', 'http://localhost:3000', 'http://localhost:3001'],
+  origin: '*', // Разрешаем доступ со всех доменов
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept']
 };
 
 app.use(cors(corsOptions));
@@ -42,13 +42,12 @@ app.use(express.static(path.join(__dirname, '../build')));
 
 // Добавляем промежуточное ПО для установки дополнительных CORS-заголовков
 app.use((req, res, next) => {
-    // Разрешаем GitHub Pages
-    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    // Разрешаем любой домен
+    res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    res.header('Access-Control-Allow-Credentials', 'true');
     
-    // Обработка OPTIONS запросов (preflight)
+    // Важно добавить следующий заголовок, чтобы разрешить предполетные запросы
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
