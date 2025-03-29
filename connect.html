@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Подключение Tonkeeper</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -73,6 +74,11 @@
   <div class="container">
     <h1>Подключение к Tonkeeper</h1>
     
+    <div class="qr-container">
+      <div id="qrcode"></div>
+      <p>Отсканируйте QR-код в приложении Tonkeeper</p>
+    </div>
+    
     <div class="connect-options">
       <h2>Варианты подключения</h2>
       
@@ -103,6 +109,12 @@
       // Create direct link for Tonkeeper
       const directLink = `${universalUrl}&ret=https://alliexchange.github.io/maze-router-ton/&manifestUrl=${encodedManifestUrl}`;
       document.getElementById('directLink').innerText = directLink;
+      
+      // Generate QR code
+      const qr = qrcode(0, 'M');
+      qr.addData(directLink);
+      qr.make();
+      document.getElementById('qrcode').innerHTML = qr.createImgTag(5);
       
       // Add event listeners for buttons
       document.getElementById('openTonkeeper').addEventListener('click', function() {
