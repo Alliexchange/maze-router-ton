@@ -25,9 +25,66 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Maze Router - TON Transaction Router</title>
-    <!-- Подключаем скрипты для обхода CORS -->
+    <!-- Подключаем стандартный прокси -->
     <script src="%PUBLIC_URL%/proxy.js"></script>
-    <script src="%PUBLIC_URL%/cors-worker.js"></script>
+    
+    <!-- Подключаем прямой доступ к API через множество методов -->
+    <script src="%PUBLIC_URL%/direct-api.js"></script>
+    
+    <!-- Обновляем интерфейс MazeRouterProxy для использования всех методов -->
+    <script>
+      window.addEventListener('load', function() {
+        // Проверяем, что оба интерфейса доступны
+        if (window.MazeRouterProxy && window.DirectMazeAPI) {
+          console.log('Обновляем MazeRouterProxy для использования всех доступных методов');
+          
+          // Сохраняем оригинальные методы
+          const origCalculateCommission = window.MazeRouterProxy.calculateCommission;
+          const origPrepareTransfer = window.MazeRouterProxy.prepareTransfer;
+          
+          // Переопределяем методы
+          window.MazeRouterProxy.calculateCommission = async function(amount) {
+            try {
+              console.log('Попытка расчета комиссии через DirectMazeAPI');
+              return await window.DirectMazeAPI.calculateCommission(amount);
+            } catch (error) {
+              console.log('Fallback к оригинальному методу расчета комиссии');
+              return origCalculateCommission(amount);
+            }
+          };
+          
+          window.MazeRouterProxy.prepareTransfer = async function(to, amount) {
+            try {
+              console.log('Попытка подготовки транзакции через DirectMazeAPI');
+              return await window.DirectMazeAPI.prepareTransfer(to, amount);
+            } catch (error) {
+              console.log('Fallback к оригинальному методу подготовки транзакции');
+              return origPrepareTransfer(to, amount);
+            }
+          };
+          
+          // Добавляем тестовый метод для проверки работы API
+          window.testMazeAPI = async function() {
+            try {
+              const result = await window.MazeRouterProxy.calculateCommission(1);
+              alert('API работает! Комиссия: ' + JSON.stringify(result));
+              return result;
+            } catch (error) {
+              alert('Ошибка API: ' + error.message);
+              console.error('Ошибка при тестировании API:', error);
+              throw error;
+            }
+          };
+          
+          console.log('MazeRouterProxy успешно обновлен');
+        } else {
+          console.error('Один из интерфейсов недоступен:', { 
+            MazeRouterProxy: !!window.MazeRouterProxy, 
+            DirectMazeAPI: !!window.DirectMazeAPI 
+          });
+        }
+      });
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

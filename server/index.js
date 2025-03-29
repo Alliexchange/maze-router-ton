@@ -102,13 +102,40 @@ function calculateCommission(amount) {
     };
 }
 
+// Функция для поддержки JSONP
+function sendJSONPResponse(req, res, data) {
+    // Проверяем наличие callback параметра
+    const callbackName = req.query.callback;
+    
+    if (callbackName) {
+        // Если параметр callback есть, оборачиваем ответ в функцию
+        log(`Отправка JSONP ответа через callback: ${callbackName}`);
+        
+        // Безопасность: проверяем, что callback имеет корректное имя
+        const callbackRegex = /^[a-zA-Z0-9_\.]+$/;
+        if (!callbackRegex.test(callbackName)) {
+            log(`JSONP callback имеет некорректное имя: ${callbackName}`);
+            return res.status(400).json({
+                error: 'Invalid callback name'
+            });
+        }
+        
+        // Отправляем JSONP ответ
+        res.setHeader('Content-Type', 'application/javascript');
+        return res.send(`${callbackName}(${JSON.stringify(data)});`);
+    } else {
+        // Если параметра callback нет, отправляем обычный JSON
+        return res.json(data);
+    }
+}
+
 // API эндпоинт для расчета комиссии (GET версия)
 app.get('/api/calculate', (req, res) => {
     try {
         const amount = req.query.amount;
         
         if (!amount || isNaN(parseFloat(amount))) {
-            return res.status(400).json({
+            return sendJSONPResponse(req, res, {
                 success: false,
                 details: 'Некорректная сумма'
             });
@@ -128,16 +155,18 @@ app.get('/api/calculate', (req, res) => {
         const total = (parsedAmount + commission + parseFloat(gasReserve)).toFixed(9);
         
         // Возвращаем информацию о комиссии
-        return res.json({
+        const response = {
             success: true,
             originalAmount: parsedAmount.toFixed(9),
             commission: commission.toFixed(9),
             gasReserve: gasReserve.toString(),
             total
-        });
+        };
+        
+        return sendJSONPResponse(req, res, response);
     } catch (error) {
         log(`Ошибка при расчете комиссии: ${error.message}`);
-        res.status(500).json({
+        sendJSONPResponse(req, res, {
             success: false,
             details: 'Ошибка сервера: ' + error.message
         });
@@ -216,7 +245,7 @@ app.get('/api/transfer', async (req, res) => {
         
         if (!to || !amount) {
             log('Ошибка: отсутствуют обязательные параметры');
-            return res.status(400).json({ 
+            return sendJSONPResponse(req, res, { 
                 success: false,
                 details: 'Некорректные параметры: необходимы to и amount'
             });
@@ -270,10 +299,10 @@ app.get('/api/transfer', async (req, res) => {
         };
 
         log(`Подготовлен ответ: ${JSON.stringify(response)}`);
-        res.json(response);
+        sendJSONPResponse(req, res, response);
     } catch (error) {
         log(`Ошибка при обработке GET запроса: ${error.message}`);
-        res.status(500).json({ 
+        sendJSONPResponse(req, res, { 
             success: false,
             details: 'Ошибка сервера: ' + error.message 
         });

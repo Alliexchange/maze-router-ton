@@ -31,57 +31,64 @@ self.addEventListener('fetch', (event) => {
   if (API_DOMAINS.some(domain => requestUrl.hostname === domain)) {
     console.log(`[SW] Перехвачен запрос к API: ${event.request.url}`);
     
-    // Создаем новый запрос с модифицированными заголовками
-    const modifiedRequest = createCORSRequest(event.request);
-    
     // Обрабатываем запрос
-    event.respondWith(handleAPIRequest(modifiedRequest, event.request.url));
+    event.respondWith(handleAPIRequest(event.request));
   }
 });
 
 /**
- * Создает запрос с CORS-заголовками
- */
-function createCORSRequest(originalRequest) {
-  // Клонируем оригинальный запрос
-  const requestInit = {
-    method: originalRequest.method,
-    headers: new Headers(originalRequest.headers),
-    mode: 'cors',
-    credentials: 'omit',
-    cache: 'no-cache',
-    redirect: 'follow'
-  };
-  
-  // Если запрос содержит тело, копируем его
-  if (['POST', 'PUT'].includes(originalRequest.method)) {
-    // Клонируем тело
-    requestInit.body = originalRequest.clone().body;
-  }
-  
-  // Создаем новый запрос
-  return new Request(originalRequest.url, requestInit);
-}
-
-/**
  * Обрабатывает запрос к API
  */
-async function handleAPIRequest(request, originalUrl) {
+async function handleAPIRequest(originalRequest) {
   try {
-    console.log(`[SW] Отправка запроса: ${originalUrl}`);
+    console.log(`[SW] Отправка запроса: ${originalRequest.url}`);
+    
+    // Создаем новый запрос с нужными опциями
+    const newRequestInit = {
+      method: originalRequest.method,
+      headers: new Headers(originalRequest.headers),
+      mode: 'cors',
+      credentials: 'omit',
+      cache: 'no-cache',
+      redirect: 'follow'
+    };
+    
+    // Важное исправление: добавляем duplex свойство для запросов с телом
+    if (['POST', 'PUT'].includes(originalRequest.method)) {
+      newRequestInit.duplex = 'half';
+      
+      // Копируем тело запроса
+      const originalBody = await originalRequest.clone().text();
+      if (originalBody) {
+        newRequestInit.body = originalBody;
+      }
+    }
+    
+    // Создаем новый запрос
+    const newRequest = new Request(originalRequest.url, newRequestInit);
     
     // Отправляем запрос
-    const response = await fetch(request);
+    const response = await fetch(newRequest);
     
-    // Если ответ успешный, но нет доступа из-за CORS
-    if (response.status === 0 || !response.ok) {
+    // Если ответ не успешный
+    if (!response.ok) {
       throw new Error(`API ответ не успешен: ${response.status}`);
     }
     
     // Создаем новый ответ с правильными CORS-заголовками
-    const modifiedResponse = createCORSResponse(response);
+    const responseBody = await response.blob();
+    const headers = new Headers(response.headers);
     
-    return modifiedResponse;
+    // Добавляем CORS-заголовки
+    headers.set('Access-Control-Allow-Origin', '*');
+    headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    headers.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    
+    return new Response(responseBody, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: headers
+    });
   } catch (error) {
     console.error(`[SW] Ошибка при запросе к API: ${error.message}`);
     
@@ -90,7 +97,7 @@ async function handleAPIRequest(request, originalUrl) {
       JSON.stringify({
         error: true,
         message: `Ошибка при запросе к API: ${error.message}`,
-        originalUrl
+        url: originalRequest.url
       }),
       {
         status: 500,
@@ -103,26 +110,4 @@ async function handleAPIRequest(request, originalUrl) {
       }
     );
   }
-}
-
-/**
- * Создает ответ с CORS-заголовками
- */
-function createCORSResponse(originalResponse) {
-  // Клонируем заголовки ответа
-  const headers = new Headers(originalResponse.headers);
-  
-  // Добавляем CORS-заголовки
-  headers.set('Access-Control-Allow-Origin', '*');
-  headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  headers.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  
-  // Создаем новый ответ с теми же данными и статусом, но с новыми заголовками
-  return originalResponse.clone().blob().then(blob => {
-    return new Response(blob, {
-      status: originalResponse.status,
-      statusText: originalResponse.statusText,
-      headers: headers
-    });
-  });
 } 
