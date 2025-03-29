@@ -1,9 +1,9 @@
 {
-  "url": "https://alliexchange.github.io/maze-router-ton",
+  "url": "https://alliexchange.github.io/maze-router-ton/",
   "name": "Maze Router",
-  "iconUrl": "https://raw.githubusercontent.com/ton-org/blueprint/main/tonconnect/logo.png",
-  "termsOfUseUrl": "https://raw.githubusercontent.com/ton-blockchain/ton/master/LICENSE",
-  "privacyPolicyUrl": "https://raw.githubusercontent.com/ton-blockchain/ton/master/LICENSE",
+  "iconUrl": "https://alliexchange.github.io/maze-router-ton/logo.png",
+  "termsOfUseUrl": "https://alliexchange.github.io/maze-router-ton/terms.html",
+  "privacyPolicyUrl": "https://alliexchange.github.io/maze-router-ton/privacy.html",
   "items": [
     {
       "name": "ton_addr",
