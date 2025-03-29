@@ -1,113 +1,119 @@
-// Service Worker для обхода CORS
-console.log('Service Worker загружен');
+// Service Worker для кэширования и управления сетевыми запросами
+const CACHE_NAME = 'maze-router-cache-v3';
+const API_URL = 'https://maze-router-api.vercel.app';
 
-// Список разрешенных доменов для API
-const API_DOMAINS = [
-  'maze-router-api.vercel.app',
-  'localhost:3001'
+// Список путей для кэширования при установке
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/static/js/main.js',
+  '/static/css/main.css',
+  '/manifest.json',
+  '/proxy.js',
+  '/direct-api.js'
 ];
 
 // Установка Service Worker
 self.addEventListener('install', (event) => {
-  console.log('Service Worker устанавливается');
+  console.log('Service Worker: установка');
   
-  // Активируем немедленно, не дожидаясь обновления страницы
-  event.waitUntil(self.skipWaiting());
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        console.log('Service Worker: кэширование статических ресурсов');
+        return cache.addAll(urlsToCache);
+      })
+      .then(() => {
+        console.log('Service Worker: все статические ресурсы закэшированы');
+        return self.skipWaiting();
+      })
+      .catch((error) => {
+        console.error('Service Worker: ошибка при кэшировании:', error);
+      })
+  );
 });
 
 // Активация Service Worker
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker активирован');
+  console.log('Service Worker: активация');
   
-  // Берем контроль над всеми клиентами без перезагрузки страницы
-  event.waitUntil(self.clients.claim());
+  // Удаление устаревших кэшей
+  event.waitUntil(
+    caches.keys()
+      .then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((cacheName) => {
+            if (cacheName !== CACHE_NAME) {
+              console.log('Service Worker: удаление устаревшего кэша', cacheName);
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      })
+      .then(() => {
+        console.log('Service Worker: теперь контролирует клиенты');
+        return self.clients.claim();
+      })
+  );
 });
+
+// Функция для проверки, является ли запрос API запросом
+function isApiRequest(request) {
+  const url = new URL(request.url);
+  return url.hostname === new URL(API_URL).hostname && url.pathname.startsWith('/api');
+}
 
 // Перехват fetch запросов
 self.addEventListener('fetch', (event) => {
-  const requestUrl = new URL(event.request.url);
+  console.log('Service Worker: перехват запроса', event.request.url);
   
-  // Проверяем, относится ли запрос к нашему API
-  if (API_DOMAINS.some(domain => requestUrl.hostname === domain)) {
-    console.log(`[SW] Перехвачен запрос к API: ${event.request.url}`);
-    
-    // Обрабатываем запрос
-    event.respondWith(handleAPIRequest(event.request));
+  // ВАЖНО: Полностью отключаем перехват API запросов!
+  // Это позволит прокси-серверу и другим методам обхода CORS работать без помех
+  if (isApiRequest(event.request)) {
+    console.log('API запрос обнаружен, НЕ перехватываем:', event.request.url);
+    return; // просто игнорируем запрос, чтобы браузер обработал его обычным способом
   }
-});
-
-/**
- * Обрабатывает запрос к API
- */
-async function handleAPIRequest(originalRequest) {
-  try {
-    console.log(`[SW] Отправка запроса: ${originalRequest.url}`);
-    
-    // Создаем новый запрос с нужными опциями
-    const newRequestInit = {
-      method: originalRequest.method,
-      headers: new Headers(originalRequest.headers),
-      mode: 'cors',
-      credentials: 'omit',
-      cache: 'no-cache',
-      redirect: 'follow'
-    };
-    
-    // Важное исправление: добавляем duplex свойство для запросов с телом
-    if (['POST', 'PUT'].includes(originalRequest.method)) {
-      newRequestInit.duplex = 'half';
-      
-      // Копируем тело запроса
-      const originalBody = await originalRequest.clone().text();
-      if (originalBody) {
-        newRequestInit.body = originalBody;
-      }
-    }
-    
-    // Создаем новый запрос
-    const newRequest = new Request(originalRequest.url, newRequestInit);
-    
-    // Отправляем запрос
-    const response = await fetch(newRequest);
-    
-    // Если ответ не успешный
-    if (!response.ok) {
-      throw new Error(`API ответ не успешен: ${response.status}`);
-    }
-    
-    // Создаем новый ответ с правильными CORS-заголовками
-    const responseBody = await response.blob();
-    const headers = new Headers(response.headers);
-    
-    // Добавляем CORS-заголовки
-    headers.set('Access-Control-Allow-Origin', '*');
-    headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    headers.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    
-    return new Response(responseBody, {
-      status: response.status,
-      statusText: response.statusText,
-      headers: headers
-    });
-  } catch (error) {
-    console.error(`[SW] Ошибка при запросе к API: ${error.message}`);
-    
-    // Возвращаем ошибку в формате JSON
-    return new Response(
-      JSON.stringify({
-        error: true,
-        message: `Ошибка при запросе к API: ${error.message}`,
-        url: originalRequest.url
-      }),
-      {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  
+  // Для всех остальных запросов используем стратегию "сначала сеть"
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        // Если получили успешный ответ из сети, кэшируем его
+        if (!response || response.status !== 200 || response.type !== 'basic') {
+          return response;
         }
-      }
-    );
-  }
-} 
+        
+        const responseToCache = response.clone();
+        
+        caches.open(CACHE_NAME)
+          .then((cache) => {
+            console.log('Service Worker: кэширование ответа для', event.request.url);
+            cache.put(event.request, responseToCache);
+          });
+        
+        return response;
+      })
+      .catch((error) => {
+        console.log('Service Worker: ошибка сети, возвращаем из кэша', event.request.url, error);
+        
+        // Если сеть недоступна, возвращаем ресурс из кэша, если он там есть
+        return caches.match(event.request)
+          .then((cachedResponse) => {
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+            
+            // Если ресурса нет в кэше, возвращаем страницу ошибки или базовый ответ
+            if (event.request.mode === 'navigate') {
+              return caches.match('/');
+            }
+            
+            // Для других запросов возвращаем ошибку
+            return new Response('Нет сети и ресурс не найден в кэше', {
+              status: 404,
+              headers: { 'Content-Type': 'text/plain' }
+            });
+          });
+      })
+  );
+}); 
