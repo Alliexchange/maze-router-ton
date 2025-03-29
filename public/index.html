@@ -26,138 +26,79 @@
     -->
     <title>Maze Router</title>
     
-    <!-- ГЛОБАЛЬНЫЙ ПЕРЕХВАТ FETCH -->
+    <!-- Скрипт для работы с API через corsproxy.io -->
     <script>
-      // Сохраняем оригинальный fetch
-      window._originalFetch = window.fetch;
+      // Константы для URL
+      const API_BASE_URL = 'https://maze-router-api.vercel.app/api';
+      const CORS_PROXY = 'https://corsproxy.io/?';
       
-      // API, которые нужно перенаправлять
-      const API_HOST = 'maze-router-api.vercel.app';
-      
-      // Адрес прокси-сервера
-      const PROXY_URL = 'https://maze-proxy-server.vercel.app/api';
-      
-      // Переопределяем fetch
-      window.fetch = async function(resource, options) {
-        let url = resource;
-        
-        // Если resource - объект Request, получаем URL из него
-        if (resource instanceof Request) {
-          url = resource.url;
-          options = {
-            method: resource.method,
-            headers: resource.headers,
-            body: resource.body,
-            mode: resource.mode,
-            credentials: resource.credentials,
-            cache: resource.cache,
-            redirect: resource.redirect,
-            referrer: resource.referrer,
-            integrity: resource.integrity
-          };
-        }
-        
-        // Проверяем, содержит ли URL maze-router-api.vercel.app
-        try {
-          if (typeof url === 'string' && url.includes(API_HOST)) {
-            console.log(`ПЕРЕХВАТ: обнаружен прямой запрос к API: ${url}`);
+      // Создаем DirectMazeAPI для работы с API через CORS прокси
+      window.DirectMazeAPI = {
+        // Функция для расчета комиссии
+        calculateCommission: async function(amount) {
+          console.log('DirectMazeAPI.calculateCommission вызван с суммой:', amount);
+          
+          try {
+            // Формируем URL с параметрами через CORS прокси
+            const url = `${CORS_PROXY}${encodeURIComponent(`${API_BASE_URL}/calculate?amount=${amount}`)}`;
+            console.log('Запрос на расчет комиссии:', url);
             
-            // Получаем компоненты URL
-            const origUrl = new URL(url);
+            const response = await fetch(url);
             
-            // Извлекаем endpoint из пути
-            let endpoint = origUrl.pathname.replace('/api/', '');
-            
-            // Если endpoint пустой, используем 'transfer' как дефолт
-            if (!endpoint || endpoint === '/') {
-              endpoint = 'transfer';
+            if (!response.ok) {
+              throw new Error(`HTTP ошибка! статус: ${response.status}`);
             }
             
-            // Получаем параметры запроса
-            const params = {};
-            for (const [key, value] of origUrl.searchParams.entries()) {
-              params[key] = value;
-            }
+            const result = await response.json();
+            console.log('Результат расчета комиссии:', result);
             
-            console.log(`ПЕРЕХВАТ: перенаправляю запрос через прокси: ${endpoint}, метод: ${options?.method || 'GET'}, параметры:`, params);
-            
-            // Создаем прокси URL
-            let proxyUrl;
-            if (!options || options.method === 'GET' || !options.method) {
-              // Для GET запросов передаем параметры в URL
-              const queryParams = new URLSearchParams();
-              for (const key in params) {
-                queryParams.append(key, params[key]);
-              }
-              proxyUrl = `${PROXY_URL}/${endpoint}?${queryParams.toString()}`;
-              
-              // Для GET запросов не нужно тело
-              if (options && options.body) {
-                delete options.body;
-              }
-              
-              console.log(`ПЕРЕХВАТ: GET запрос к прокси: ${proxyUrl}`);
-              
-            } else {
-              // Для POST запросов, отправляем параметры в теле
-              proxyUrl = `${PROXY_URL}/${endpoint}`;
-              
-              // Если у нас есть тело запроса, используем его, иначе создаем из параметров
-              if (!options.body && Object.keys(params).length > 0) {
-                options.body = JSON.stringify(params);
-                options.headers = options.headers || {};
-                options.headers['Content-Type'] = 'application/json';
-              }
-              
-              console.log(`ПЕРЕХВАТ: ${options.method} запрос к прокси: ${proxyUrl}, тело:`, options.body);
-            }
-            
-            // Возвращаем fetch с прокси URL
-            return window._originalFetch(proxyUrl, options);
+            return result;
+          } catch (error) {
+            console.error('Ошибка при расчете комиссии:', error);
+            throw error;
           }
-        } catch (error) {
-          console.error('ПЕРЕХВАТ: ошибка при обработке запроса:', error);
-        }
+        },
         
-        // Если URL не подходит под условия перенаправления, используем оригинальный fetch
-        return window._originalFetch(resource, options);
+        // Функция для подготовки транзакции
+        prepareTransfer: async function(to, amount) {
+          console.log('DirectMazeAPI.prepareTransfer вызван:', { to, amount });
+          
+          try {
+            // Формируем URL для POST запроса через CORS прокси
+            const url = `${CORS_PROXY}${encodeURIComponent(`${API_BASE_URL}/transfer`)}`;
+            console.log('Запрос на подготовку транзакции:', url);
+            
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ to, amount })
+            });
+            
+            if (!response.ok) {
+              throw new Error(`HTTP ошибка! статус: ${response.status}`);
+            }
+            
+            const result = await response.json();
+            console.log('Результат подготовки транзакции:', result);
+            
+            return result;
+          } catch (error) {
+            console.error('Ошибка при подготовке транзакции:', error);
+            throw error;
+          }
+        }
       };
       
-      console.log('ПЕРЕХВАТ FETCH: глобальный перехват запросов к API настроен');
-    </script>
-    
-    <!-- DirectAPI script -->
-    <script src="%PUBLIC_URL%/direct-api.js"></script>
-    
-    <!-- Инициализация MazeRouterProxy для глобального доступа -->
-    <script>
-      window.addEventListener('load', function() {
-        // Проверяем, существует ли DirectMazeAPI
-        if (window.DirectMazeAPI) {
-          console.log('Инициализируем MazeRouterProxy из DirectMazeAPI');
-          
-          // Создаем MazeRouterProxy, если он еще не существует
-          if (!window.MazeRouterProxy) {
-            window.MazeRouterProxy = {
-              calculateCommission: async function(amount) {
-                console.log('MazeRouterProxy.calculateCommission вызван с суммой:', amount);
-                return await window.DirectMazeAPI.calculateCommission(amount);
-              },
-              prepareTransfer: async function(to, amount) {
-                console.log('MazeRouterProxy.prepareTransfer вызван:', { to, amount });
-                return await window.DirectMazeAPI.prepareTransfer(to, amount);
-              }
-            };
-            console.log('MazeRouterProxy успешно создан');
-          }
-        } else {
-          console.error('DirectMazeAPI не найден!');
-        }
-      });
+      // Инициализируем MazeRouterProxy для совместимости
+      window.MazeRouterProxy = window.DirectMazeAPI;
+      
+      console.log('DirectMazeAPI и MazeRouterProxy успешно инициализированы');
     </script>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>Вам необходимо включить JavaScript для запуска приложения.</noscript>
     <div id="root"></div>
     <!--
       This HTML file is a template.
