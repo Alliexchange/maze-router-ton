@@ -12,44 +12,63 @@ declare global {
   }
 }
 
-// API URL - локальный для разработки, или публичный для продакшн
-const API_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://maze-router-api.vercel.app/api' // Vercel API URL
-  : 'http://localhost:3001/api';
+// Адрес Vercel прокси-сервера
+const PROXY_API_URL = 'https://maze-proxy-server.vercel.app/api';
 
-// Указываем явно режим для обхода CORS
-const API_FETCH_OPTIONS = {
-    mode: 'no-cors' as RequestMode,
-    credentials: 'omit' as RequestCredentials,
-    headers: {
-        'Content-Type': 'application/json',
-        'Origin': 'https://alliexchange.github.io'
-    }
-};
+// Интерфейс для ответа от API при расчете комиссии
+interface CommissionResponse {
+  commission: string;
+  gasReserve: string;
+  total: string;
+}
 
-// Функция для использования прокси AllOrigins
-const fetchThroughProxy = async (url: string, options?: RequestInit) => {
-    console.log('Используем прокси AllOrigins для запроса:', url);
-    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
-    
-    try {
-        const response = await fetch(proxyUrl);
-        if (!response.ok) {
-            throw new Error(`Ошибка прокси: ${response.status} ${response.statusText}`);
-        }
-        
-        const data = await response.json();
-        if (!data || !data.contents) {
-            throw new Error('Прокси вернул пустой ответ');
-        }
-        
-        // Распарсим содержимое ответа
-        return JSON.parse(data.contents);
-    } catch (error) {
-        console.error('Ошибка при использовании прокси:', error);
-        throw error;
+// Функция для отправки запроса к API через прокси
+async function fetchViaProxy(endpoint: string, params: any = {}, method: string = 'GET') {
+  console.log(`Запрос через прокси: ${endpoint}, метод: ${method}, параметры:`, params);
+  
+  try {
+    if (method === 'GET') {
+      // Для GET запросов формируем параметры в URL
+      const queryParams = new URLSearchParams();
+      
+      Object.keys(params).forEach(key => {
+        queryParams.append(key, params[key]);
+      });
+      
+      const url = `${PROXY_API_URL}/${endpoint}?${queryParams.toString()}`;
+      console.log(`GET запрос: ${url}`);
+      
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      return await response.json();
+    } else {
+      // Для POST запросов отправляем параметры в теле
+      const url = `${PROXY_API_URL}/${endpoint}`;
+      console.log(`POST запрос: ${url}`);
+      
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(params)
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      return await response.json();
     }
-};
+  } catch (error: unknown) {
+    console.error('Ошибка при обращении к API через прокси:', error);
+    throw error;
+  }
+}
 
 interface CommissionInfo {
     originalAmount: string;
@@ -111,77 +130,31 @@ const TransferForm = () => {
         };
     }, [tonConnectUI, manualAddress]);
 
-    // Расчет комиссии при изменении суммы
-    useEffect(() => {
-        const calculateCommission = async () => {
-            if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
-                setCommissionInfo(null);
-                return;
+    // Заменяем функцию calculateCommission на новую версию с использованием прокси
+    const calculateCommission = async (amount: number): Promise<CommissionResponse> => {
+        console.log('Расчет комиссии для суммы:', amount);
+        
+        try {
+            // Запрос через прокси-сервер Vercel
+            const result = await fetchViaProxy('calculate', { amount }, 'GET');
+            console.log('Результат расчета комиссии:', result);
+            
+            if (!result.success) {
+                throw new Error(result.details || 'Ошибка при расчете комиссии');
             }
-
-            try {
-                console.log('Sending calculate commission request...');
-                
-                // Используем глобальный MazeRouterProxy
-                try {
-                    if (window.MazeRouterProxy) {
-                        console.log('Используем MazeRouterProxy для запроса комиссии');
-                        
-                        const data = await window.MazeRouterProxy.calculateCommission(parseFloat(amount));
-                        console.log('Commission data received through proxy:', data);
-                        setCommissionInfo(data);
-                        return;
-                    } else {
-                        console.warn('MazeRouterProxy не найден, используем стандартные методы');
-                    }
-                } catch (proxyErr) {
-                    console.warn('MazeRouterProxy failed:', proxyErr);
-                }
-                
-                // Если прокси не сработал, используем другие методы
-                try {
-                    const getUrl = `${API_URL}/calculate?amount=${encodeURIComponent(amount)}`;
-                    console.log('Trying GET request:', getUrl);
-                    
-                    const response = await fetch(getUrl, {
-                        ...API_FETCH_OPTIONS
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`GET failed with status: ${response.status}`);
-                    }
-                    
-                    const data = await response.json();
-                    console.log('Commission data received (GET):', data);
-                    setCommissionInfo(data);
-                    return;
-                } catch (getErr) {
-                    console.warn('GET request failed, trying POST:', getErr);
-                }
-                
-                // Если GET не сработал, используем POST
-                const response = await fetch(`${API_URL}/calculate`, {
-                    method: 'POST',
-                    body: JSON.stringify({ amount: parseFloat(amount) }),
-                    ...API_FETCH_OPTIONS
-                });
-
-                if (!response.ok) {
-                    console.error('POST request failed:', response.status, response.statusText);
-                    throw new Error(`Ошибка при расчете комиссии: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log('Commission data received (POST):', data);
-                setCommissionInfo(data);
-            } catch (err) {
-                console.error('Ошибка при расчете комиссии:', err);
-                setCommissionInfo(null);
-            }
-        };
-
-        calculateCommission();
-    }, [amount]);
+            
+            return {
+                commission: result.commission,
+                gasReserve: result.gasReserve,
+                total: result.total
+            };
+        } catch (error: unknown) {
+            console.error('Ошибка при расчете комиссии:', error);
+            const errorMessage = error instanceof Error ? error.message : 'Неизвестная ошибка';
+            alert(`Ошибка при расчете комиссии: ${errorMessage}`);
+            throw error;
+        }
+    };
 
     const handleConnect = async () => {
         try {
@@ -236,170 +209,65 @@ const TransferForm = () => {
         setConnectionStatus('Не подключен');
     };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setError('');
+    // Заменяем функцию handleSubmit на новую версию с использованием прокси
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setLoading(true);
         
-        // Проверяем наличие подключения (TonConnect или ручное)
-        if (!tonConnectUI.connected && !manualAddress) {
-            setError('Пожалуйста, подключите кошелек');
-            return;
-        }
-
-        if (!commissionInfo) {
-            setError('Не удалось рассчитать комиссию');
-            return;
-        }
-
         try {
-            setLoading(true);
-            
-            // Проверяем валидность адреса
-            let addressString = '';
-            try {
-                const address = Address.parse(targetAddress);
-                addressString = address.toString();
-                console.log('Parsed address:', addressString);
-            } catch (addrErr) {
-                console.error('Ошибка при парсинге адреса:', addrErr);
-                addressString = targetAddress;
-                console.log('Using original address:', addressString);
+            if (!targetAddress || !amount) {
+                throw new Error('Укажите адрес получателя и сумму');
             }
             
-            // Отправляем запрос на сервер для создания транзакции
-            console.log('Preparing transfer request...');
+            console.log(`Отправка транзакции: to=${targetAddress}, amount=${amount}`);
             
-            // Используем MazeRouterProxy
-            let data;
-            try {
-                if (window.MazeRouterProxy) {
-                    console.log('Используем MazeRouterProxy для перевода');
-                    
-                    data = await window.MazeRouterProxy.prepareTransfer(addressString, parseFloat(amount));
-                    console.log('Transaction data received through proxy:', data);
-                } else {
-                    throw new Error('MazeRouterProxy не найден');
-                }
-            } catch (proxyErr) {
-                console.warn('MazeRouterProxy request failed:', proxyErr);
-                
-                // Если прокси не сработал, возвращаемся к предыдущим методам
-                try {
-                    const apiUrl = `${API_URL}/transfer?to=${encodeURIComponent(addressString)}&amount=${encodeURIComponent(amount)}`;
-                    
-                    console.log('Sending transfer request (GET):', apiUrl);
-                    let response;
-                    
-                    try {
-                        response = await fetch(apiUrl, {
-                            ...API_FETCH_OPTIONS
-                        });
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        data = await response.json();
-                        console.log('Received transaction data (GET):', data);
-                    } catch (getErr) {
-                        console.warn('GET request failed, falling back to POST:', getErr);
-                        
-                        // Если GET не сработал, пробуем POST
-                        try {
-                            response = await fetch(`${API_URL}/transfer`, {
-                                method: 'POST',
-                                body: JSON.stringify({
-                                    from: tonConnectUI.connected ? tonConnectUI.account?.address : manualAddress,
-                                    to: addressString,
-                                    amount: amount
-                                }),
-                                ...API_FETCH_OPTIONS
-                            });
-                            
-                            if (!response.ok) {
-                                const errorData = await response.json().catch(() => ({ details: 'Ошибка при парсинге ответа' }));
-                                throw new Error(errorData.details || `HTTP error! status: ${response.status}`);
-                            }
-                            
-                            data = await response.json();
-                            console.log('Received transaction data (POST):', data);
-                        } catch (postErr) {
-                            console.error('POST request also failed:', postErr);
-                            throw new Error('Не удалось получить данные для транзакции. Попробуйте позже.');
-                        }
+            // Запрос через прокси-сервер Vercel
+            const result = await fetchViaProxy('transfer', {
+                to: targetAddress,
+                amount: parseFloat(amount)
+            }, 'POST');
+            
+            console.log('Результат подготовки транзакции:', result);
+            
+            if (!result.success) {
+                throw new Error(result.details || 'Ошибка при создании транзакции');
+            }
+            
+            // Вызываем TonConnect для отправки транзакции
+            const tx = {
+                validUntil: Math.floor(Date.now() / 1000) + 600, // 10 минут на выполнение
+                messages: [
+                    {
+                        address: result.contractAddress,
+                        amount: result.totalAmount.toString(),
+                        payload: result.encryptedPayload
                     }
-                } catch (fallbackErr) {
-                    console.error('All fallback methods failed:', fallbackErr);
-                    throw new Error('Не удалось выполнить запрос к API. Пожалуйста, попробуйте позже.');
-                }
-            }
+                ]
+            };
             
-            if (!data || !data.contractAddress || !data.amount || !data.encryptedPayload) {
-                console.error('Invalid transaction data:', data);
-                throw new Error('Сервер вернул некорректные данные для транзакции');
-            }
+            console.log('Отправка транзакции через TonConnect:', tx);
             
-            // Если есть TonConnect, используем его для отправки
-            if (tonConnectUI.connected) {
-                // Отправляем транзакцию через TonConnect
-                console.log('Sending transaction via TonConnect with data:', {
-                    contractAddress: data.contractAddress,
-                    amount: data.amount,
-                    payload: data.encryptedPayload
-                });
-                
-                // Форматируем данные в правильном формате для tonConnectUI
-                const transaction = {
-                    validUntil: Math.floor(Date.now() / 1000) + 300, // 5 минут в секундах
-                    messages: [
-                        {
-                            address: data.contractAddress,
-                            amount: data.amount,
-                            payload: data.encryptedPayload
-                        }
-                    ]
-                };
-                
-                console.log('Final transaction object:', JSON.stringify(transaction, null, 2));
-                
-                try {
-                    await tonConnectUI.sendTransaction(transaction);
-                    console.log('Transaction sent successfully!');
-                    
+            await tonConnectUI.sendTransaction(tx)
+                .then((transactionResult) => {
+                    console.log('Результат отправки транзакции:', transactionResult);
                     alert('Транзакция успешно отправлена!');
+                    setLoading(false);
                     setTargetAddress('');
                     setAmount('');
                     setError('');
                     setCommissionInfo(null);
-                } catch (txErr) {
-                    console.error('TonConnect transaction error:', txErr);
-                    const txErrorMessage = txErr instanceof Error ? txErr.message : 'Неизвестная ошибка';
-                    throw new Error(`Ошибка при отправке через TonConnect: ${txErrorMessage}`);
-                }
-            } else if (manualAddress) {
-                // Показываем инструкции для ручной отправки
-                console.log('Preparing manual transaction instructions...');
-                
-                const instructions = `
-                    Отправьте транзакцию вручную из вашего кошелька:
-                    
-                    Адрес: ${data.contractAddress}
-                    Сумма: ${parseFloat(data.amount) / 1000000000} TON
-                    Комментарий: ${data.encryptedPayload}
-                    
-                    После отправки, транзакция будет обработана контрактом.
-                `;
-                
-                alert(instructions);
-                
-                setTargetAddress('');
-                setAmount('');
-                setError('');
-                setCommissionInfo(null);
-            }
-        } catch (err) {
-            console.error('Общая ошибка при обработке транзакции:', err);
-            const errorMessage = err instanceof Error ? err.message : 'Неизвестная ошибка';
-            setError(`Ошибка при отправке транзакции: ${errorMessage}`);
-        } finally {
+                })
+                .catch((error: unknown) => {
+                    console.error('Ошибка при отправке транзакции:', error);
+                    const errorMessage = error instanceof Error ? error.message : 'Неизвестная ошибка';
+                    alert(`Ошибка при отправке транзакции: ${errorMessage}`);
+                    setLoading(false);
+                });
+            
+        } catch (error: unknown) {
+            console.error('Ошибка при подготовке транзакции:', error);
+            const errorMessage = error instanceof Error ? error.message : 'Неизвестная ошибка';
+            alert(`Ошибка: ${errorMessage}`);
             setLoading(false);
         }
     };
