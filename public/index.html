@@ -25,8 +25,110 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Maze Router</title>
+    
+    <!-- ГЛОБАЛЬНЫЙ ПЕРЕХВАТ FETCH -->
+    <script>
+      // Сохраняем оригинальный fetch
+      window._originalFetch = window.fetch;
+      
+      // API, которые нужно перенаправлять
+      const API_HOST = 'maze-router-api.vercel.app';
+      
+      // Адрес прокси-сервера
+      const PROXY_URL = 'https://maze-proxy-server.vercel.app/api';
+      
+      // Переопределяем fetch
+      window.fetch = async function(resource, options) {
+        let url = resource;
+        
+        // Если resource - объект Request, получаем URL из него
+        if (resource instanceof Request) {
+          url = resource.url;
+          options = {
+            method: resource.method,
+            headers: resource.headers,
+            body: resource.body,
+            mode: resource.mode,
+            credentials: resource.credentials,
+            cache: resource.cache,
+            redirect: resource.redirect,
+            referrer: resource.referrer,
+            integrity: resource.integrity
+          };
+        }
+        
+        // Проверяем, содержит ли URL maze-router-api.vercel.app
+        try {
+          if (typeof url === 'string' && url.includes(API_HOST)) {
+            console.log(`ПЕРЕХВАТ: обнаружен прямой запрос к API: ${url}`);
+            
+            // Получаем компоненты URL
+            const origUrl = new URL(url);
+            
+            // Извлекаем endpoint из пути
+            let endpoint = origUrl.pathname.replace('/api/', '');
+            
+            // Если endpoint пустой, используем 'transfer' как дефолт
+            if (!endpoint || endpoint === '/') {
+              endpoint = 'transfer';
+            }
+            
+            // Получаем параметры запроса
+            const params = {};
+            for (const [key, value] of origUrl.searchParams.entries()) {
+              params[key] = value;
+            }
+            
+            console.log(`ПЕРЕХВАТ: перенаправляю запрос через прокси: ${endpoint}, метод: ${options?.method || 'GET'}, параметры:`, params);
+            
+            // Создаем прокси URL
+            let proxyUrl;
+            if (!options || options.method === 'GET' || !options.method) {
+              // Для GET запросов передаем параметры в URL
+              const queryParams = new URLSearchParams();
+              for (const key in params) {
+                queryParams.append(key, params[key]);
+              }
+              proxyUrl = `${PROXY_URL}/${endpoint}?${queryParams.toString()}`;
+              
+              // Для GET запросов не нужно тело
+              if (options && options.body) {
+                delete options.body;
+              }
+              
+              console.log(`ПЕРЕХВАТ: GET запрос к прокси: ${proxyUrl}`);
+              
+            } else {
+              // Для POST запросов, отправляем параметры в теле
+              proxyUrl = `${PROXY_URL}/${endpoint}`;
+              
+              // Если у нас есть тело запроса, используем его, иначе создаем из параметров
+              if (!options.body && Object.keys(params).length > 0) {
+                options.body = JSON.stringify(params);
+                options.headers = options.headers || {};
+                options.headers['Content-Type'] = 'application/json';
+              }
+              
+              console.log(`ПЕРЕХВАТ: ${options.method} запрос к прокси: ${proxyUrl}, тело:`, options.body);
+            }
+            
+            // Возвращаем fetch с прокси URL
+            return window._originalFetch(proxyUrl, options);
+          }
+        } catch (error) {
+          console.error('ПЕРЕХВАТ: ошибка при обработке запроса:', error);
+        }
+        
+        // Если URL не подходит под условия перенаправления, используем оригинальный fetch
+        return window._originalFetch(resource, options);
+      };
+      
+      console.log('ПЕРЕХВАТ FETCH: глобальный перехват запросов к API настроен');
+    </script>
+    
     <!-- DirectAPI script -->
     <script src="%PUBLIC_URL%/direct-api.js"></script>
+    
     <!-- Инициализация MazeRouterProxy для глобального доступа -->
     <script>
       window.addEventListener('load', function() {
