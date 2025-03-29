@@ -8,12 +8,31 @@ declare global {
     MazeRouterProxy?: {
       calculateCommission: (amount: number) => Promise<any>;
       prepareTransfer: (to: string, amount: number) => Promise<any>;
-    }
+    };
+    DirectMazeAPI?: {
+      calculateCommission: (amount: number) => Promise<any>;
+      prepareTransfer: (to: string, amount: number) => Promise<any>;
+    };
   }
 }
 
 // Адрес Vercel прокси-сервера
 const PROXY_API_URL = 'https://maze-proxy-server.vercel.app/api';
+
+// Создаем глобальный объект MazeRouterProxy, если он еще не существует
+if (typeof window !== 'undefined' && !window.MazeRouterProxy) {
+  console.log('Инициализация MazeRouterProxy в TransferForm...');
+  window.MazeRouterProxy = {
+    calculateCommission: async (amount) => {
+      console.log('MazeRouterProxy.calculateCommission вызван с суммой:', amount);
+      return fetchViaProxy('calculate', { amount }, 'GET');
+    },
+    prepareTransfer: async (to, amount) => {
+      console.log('MazeRouterProxy.prepareTransfer вызван:', { to, amount });
+      return fetchViaProxy('transfer', { to, amount }, 'POST');
+    }
+  };
+}
 
 // Интерфейс для ответа от API при расчете комиссии
 interface CommissionResponse {
@@ -27,6 +46,21 @@ async function fetchViaProxy(endpoint: string, params: any = {}, method: string 
   console.log(`Запрос через прокси: ${endpoint}, метод: ${method}, параметры:`, params);
   
   try {
+    // Пробуем использовать DirectMazeAPI, если он доступен
+    if (window.DirectMazeAPI) {
+      try {
+        console.log(`Используем DirectMazeAPI для ${endpoint}`);
+        if (endpoint === 'calculate') {
+          return await window.DirectMazeAPI.calculateCommission(params.amount);
+        } else if (endpoint === 'transfer') {
+          return await window.DirectMazeAPI.prepareTransfer(params.to, params.amount);
+        }
+      } catch (directApiError) {
+        console.error('Ошибка при использовании DirectMazeAPI:', directApiError);
+        // Продолжаем выполнение и пробуем стандартный метод
+      }
+    }
+
     if (method === 'GET') {
       // Для GET запросов формируем параметры в URL
       const queryParams = new URLSearchParams();

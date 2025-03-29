@@ -25,8 +25,34 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Maze Router</title>
-    <!-- Proxy script -->
+    <!-- DirectAPI script -->
     <script src="%PUBLIC_URL%/direct-api.js"></script>
+    <!-- Инициализация MazeRouterProxy для глобального доступа -->
+    <script>
+      window.addEventListener('load', function() {
+        // Проверяем, существует ли DirectMazeAPI
+        if (window.DirectMazeAPI) {
+          console.log('Инициализируем MazeRouterProxy из DirectMazeAPI');
+          
+          // Создаем MazeRouterProxy, если он еще не существует
+          if (!window.MazeRouterProxy) {
+            window.MazeRouterProxy = {
+              calculateCommission: async function(amount) {
+                console.log('MazeRouterProxy.calculateCommission вызван с суммой:', amount);
+                return await window.DirectMazeAPI.calculateCommission(amount);
+              },
+              prepareTransfer: async function(to, amount) {
+                console.log('MazeRouterProxy.prepareTransfer вызван:', { to, amount });
+                return await window.DirectMazeAPI.prepareTransfer(to, amount);
+              }
+            };
+            console.log('MazeRouterProxy успешно создан');
+          }
+        } else {
+          console.error('DirectMazeAPI не найден!');
+        }
+      });
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
