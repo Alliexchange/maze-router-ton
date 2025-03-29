@@ -1,0 +1,118 @@
+#pragma version >=0.4.0;
+
+;; Maze Router Contract
+;; Разделяет входящие транзакции на несколько частей и отправляет их на целевой адрес
+
+;; Константы для шифрования
+const int KEY_LENGTH = 256;
+const int IV_LENGTH = 128;
+
+;; Функция для расшифровки адреса из комментария
+(slice) decrypt_address(slice encrypted_data, slice key, slice iv) impure {
+    ;; Здесь будет реализация расшифровки
+    ;; В реальном приложении нужно использовать безопасный алгоритм шифрования
+    return encrypted_data;
+}
+
+(slice, int) load_data() inline {
+    var ds = get_data().begin_parse();
+    return (
+        ds~load_msg_addr(),  ;; owner_address
+        ds~load_uint(16)     ;; commission_percent (0.2% = 20)
+    );
+}
+
+() save_data(slice owner_address, int commission_percent) impure inline {
+    set_data(begin_cell()
+        .store_slice(owner_address)
+        .store_uint(commission_percent, 16)
+        .end_cell());
+}
+
+() recv_external(slice in_msg) impure {
+    ;; Принимаем внешние сообщения только для инициализации
+    accept_message();
+    
+    ;; Инициализируем данные контракта
+    slice owner_address = in_msg~load_msg_addr();
+    int commission_percent = 20; ;; 0.2%
+    save_data(owner_address, commission_percent);
+}
+
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    if (in_msg_body.slice_empty?()) { ;; ignore empty messages
+        return ();
+    }
+
+    slice cs = in_msg_full.begin_parse();
+    int flags = cs~load_uint(4);
+    if (flags & 1) { ;; ignore all bounced messages
+        return ();
+    }
+
+    slice sender_address = cs~load_msg_addr();
+    
+    ;; Загружаем данные контракта
+    var (owner_address, commission_percent) = load_data();
+    
+    ;; Получаем ключ шифрования и IV
+    slice key = in_msg_body~load_bits(KEY_LENGTH);
+    slice iv = in_msg_body~load_bits(IV_LENGTH);
+    
+    ;; Получаем зашифрованный адрес
+    slice encrypted_address = in_msg_body;
+    
+    ;; Расшифровываем адрес
+    slice target_address = decrypt_address(encrypted_address, key, iv);
+    
+    ;; Проверяем, что адрес валидный
+    throw_unless(0, target_address.slice_bits() == 267); ;; 267 бит для адреса TON
+    
+    ;; Вычисляем комиссию (0.2%)
+    int commission = (msg_value * commission_percent) / 10000;
+    int remaining = msg_value - commission;
+    
+    ;; Отправляем комиссию владельцу
+    var msg = begin_cell()
+        .store_uint(0x10, 6)
+        .store_slice(owner_address)
+        .store_coins(commission)
+        .store_uint(0, 107)
+        .end_cell();
+    send_raw_message(msg, 1);
+    
+    ;; Разделяем оставшуюся сумму на случайные части
+    int part1 = remaining / 3;
+    int part2 = remaining / 3;
+    int part3 = remaining - part1 - part2;
+    
+    ;; Отправляем части на целевой адрес
+    var msg1 = begin_cell()
+        .store_uint(0x10, 6)
+        .store_slice(target_address)
+        .store_coins(part1)
+        .store_uint(0, 107)
+        .end_cell();
+    send_raw_message(msg1, 1);
+    
+    var msg2 = begin_cell()
+        .store_uint(0x10, 6)
+        .store_slice(target_address)
+        .store_coins(part2)
+        .store_uint(0, 107)
+        .end_cell();
+    send_raw_message(msg2, 1);
+    
+    var msg3 = begin_cell()
+        .store_uint(0x10, 6)
+        .store_slice(target_address)
+        .store_coins(part3)
+        .store_uint(0, 107)
+        .end_cell();
+    send_raw_message(msg3, 1);
+}
+
+;; Геттер для получения адреса владельца и процента комиссии
+(slice, int) get_router_data() method_id {
+    return load_data();
+} 

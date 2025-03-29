@@ -1,0 +1,122 @@
+.App {
+  text-align: center;
+  min-height: 100vh;
+  background-color: #282c34;
+  color: white;
+  padding: 20px;
+}
+
+.App-header {
+  margin-bottom: 40px;
+}
+
+.transfer-form {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #1a1d23;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #61dafb;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #61dafb;
+  border-radius: 4px;
+  background-color: #282c34;
+  color: white;
+  font-size: 16px;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #00b4d8;
+}
+
+button {
+  background-color: #61dafb;
+  color: #282c34;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #00b4d8;
+}
+
+button:disabled {
+  background-color: #4a4a4a;
+  cursor: not-allowed;
+}
+
+.wallet-connection {
+  margin-bottom: 20px;
+}
+
+.connect-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.web-connect {
+  background-color: #0088cc;
+}
+
+.web-connect:hover {
+  background-color: #006699;
+}
+
+.manual-input {
+  background-color: #28a745;
+}
+
+.manual-input:hover {
+  background-color: #218838;
+}
+
+.disconnect {
+  background-color: #dc3545;
+}
+
+.disconnect:hover {
+  background-color: #c82333;
+}
+
+.commission-info {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #2c313c;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.commission-info p {
+  margin: 8px 0;
+  color: #61dafb;
+  font-size: 14px;
+}
+
+.commission-info p:last-child {
+  margin-top: 12px;
+  font-weight: bold;
+  font-size: 16px;
+  color: white;
+} 
