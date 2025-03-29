@@ -12,8 +12,11 @@ window.MazeRouterJSONPCallback = function(data) {
 // Счетчик для уникальных имен коллбэков
 let callbackCounter = 0;
 
-// API URL
+// Основной API URL
 const API_BASE_URL = 'https://maze-router-api.vercel.app/api';
+
+// URL Vercel-прокси сервера
+const VERCEL_PROXY_URL = 'https://maze-proxy-server.vercel.app/api';
 
 // Функция для создания JSONP запроса
 function createJSONPRequest(endpoint, params = {}) {
@@ -87,12 +90,12 @@ function createJSONPRequest(endpoint, params = {}) {
 }
 
 // Функция для отправки запроса через произвольный переданный URL
-async function fetchViaExternalAPI(url) {
+async function fetchViaExternalAPI(url, options = {}) {
   try {
     console.log('Отправка запроса через внешний API:', url);
     
     // Оборачиваем запрос в try-catch, чтобы обработать возможные ошибки
-    const response = await fetch(url);
+    const response = await fetch(url, options);
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -104,6 +107,41 @@ async function fetchViaExternalAPI(url) {
   } catch (error) {
     console.error('Ошибка при выполнении запроса через внешний API:', error);
     throw error;
+  }
+}
+
+// Функция для отправки запроса через Vercel Proxy
+async function fetchViaVercelProxy(endpoint, params = {}, method = 'GET') {
+  console.log(`Отправка запроса через Vercel Proxy: ${endpoint}, метод: ${method}`);
+  
+  if (method === 'GET') {
+    // Добавляем параметры в URL
+    const queryParams = new URLSearchParams();
+    
+    // Добавляем все параметры
+    Object.keys(params).forEach(key => {
+      queryParams.append(key, params[key]);
+    });
+    
+    // Собираем URL API
+    const apiUrl = `${VERCEL_PROXY_URL}/${endpoint}?${queryParams.toString()}`;
+    
+    // Отправляем GET запрос
+    return fetchViaExternalAPI(apiUrl);
+  } else {
+    // Для POST запросов, отправляем тело в формате JSON
+    const apiUrl = `${VERCEL_PROXY_URL}/${endpoint}`;
+    
+    const options = {
+      method,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(params)
+    };
+    
+    // Отправляем POST запрос
+    return fetchViaExternalAPI(apiUrl, options);
   }
 }
 
@@ -175,32 +213,41 @@ window.DirectMazeAPI = {
   calculateCommission: async (amount) => {
     console.log(`Расчет комиссии для суммы: ${amount}`);
     
-    // Сначала пробуем через JSONP
+    // Сначала пробуем через Vercel Proxy
     try {
-      const result = await createJSONPRequest('calculate', { amount });
-      console.log('JSONP ответ:', result);
+      const result = await fetchViaVercelProxy('calculate', { amount }, 'GET');
+      console.log('Vercel Proxy ответ (calculate):', result);
       return result;
-    } catch (jsonpError) {
-      console.error('JSONP запрос не удался:', jsonpError);
+    } catch (vercelError) {
+      console.error('Vercel Proxy запрос не удался:', vercelError);
       
-      // Затем пробуем через CORS Anywhere
+      // Затем пробуем через JSONP
       try {
-        const result = await fetchViaCORSAnywhere('calculate', { amount });
-        console.log('CORS Anywhere ответ:', result);
+        const result = await createJSONPRequest('calculate', { amount });
+        console.log('JSONP ответ:', result);
         return result;
-      } catch (corsError) {
-        console.error('CORS Anywhere запрос не удался:', corsError);
+      } catch (jsonpError) {
+        console.error('JSONP запрос не удался:', jsonpError);
         
-        // Наконец, пробуем через AllOrigins
+        // Затем пробуем через CORS Anywhere
         try {
-          const result = await fetchViaAllOrigins('calculate', { amount });
-          console.log('AllOrigins ответ:', result);
+          const result = await fetchViaCORSAnywhere('calculate', { amount });
+          console.log('CORS Anywhere ответ:', result);
           return result;
-        } catch (allOriginsError) {
-          console.error('All Origins запрос не удался:', allOriginsError);
+        } catch (corsError) {
+          console.error('CORS Anywhere запрос не удался:', corsError);
           
-          // Если все методы не сработали, возвращаем ошибку
-          throw new Error('Не удалось выполнить запрос ни одним из доступных методов');
+          // Наконец, пробуем через AllOrigins
+          try {
+            const result = await fetchViaAllOrigins('calculate', { amount });
+            console.log('AllOrigins ответ:', result);
+            return result;
+          } catch (allOriginsError) {
+            console.error('All Origins запрос не удался:', allOriginsError);
+            
+            // Если все методы не сработали, возвращаем ошибку
+            throw new Error('Не удалось выполнить запрос ни одним из доступных методов');
+          }
         }
       }
     }
@@ -210,24 +257,42 @@ window.DirectMazeAPI = {
   prepareTransfer: async (to, amount) => {
     console.log(`Подготовка перевода: to=${to}, amount=${amount}`);
     
-    // Для этого запроса используем только CORS Anywhere и AllOrigins, т.к. JSONP не подходит для сложных запросов
+    // Сначала пробуем через Vercel Proxy (GET)
     try {
-      const result = await fetchViaCORSAnywhere('transfer', { to, amount });
-      console.log('CORS Anywhere ответ:', result);
+      const result = await fetchViaVercelProxy('transfer', { to, amount }, 'GET');
+      console.log('Vercel Proxy GET ответ (transfer):', result);
       return result;
-    } catch (corsError) {
-      console.error('CORS Anywhere запрос не удался:', corsError);
+    } catch (vercelGetError) {
+      console.error('Vercel Proxy GET запрос не удался:', vercelGetError);
       
-      // Пробуем через AllOrigins
+      // Пробуем через Vercel Proxy (POST)
       try {
-        const result = await fetchViaAllOrigins('transfer', { to, amount });
-        console.log('AllOrigins ответ:', result);
+        const result = await fetchViaVercelProxy('transfer', { to, amount }, 'POST');
+        console.log('Vercel Proxy POST ответ (transfer):', result);
         return result;
-      } catch (allOriginsError) {
-        console.error('All Origins запрос не удался:', allOriginsError);
+      } catch (vercelPostError) {
+        console.error('Vercel Proxy POST запрос не удался:', vercelPostError);
         
-        // Если все методы не сработали, возвращаем ошибку
-        throw new Error('Не удалось выполнить запрос ни одним из доступных методов');
+        // Для этого запроса используем только CORS Anywhere и AllOrigins, т.к. JSONP не подходит для сложных запросов
+        try {
+          const result = await fetchViaCORSAnywhere('transfer', { to, amount });
+          console.log('CORS Anywhere ответ:', result);
+          return result;
+        } catch (corsError) {
+          console.error('CORS Anywhere запрос не удался:', corsError);
+          
+          // Пробуем через AllOrigins
+          try {
+            const result = await fetchViaAllOrigins('transfer', { to, amount });
+            console.log('AllOrigins ответ:', result);
+            return result;
+          } catch (allOriginsError) {
+            console.error('All Origins запрос не удался:', allOriginsError);
+            
+            // Если все методы не сработали, возвращаем ошибку
+            throw new Error('Не удалось выполнить запрос ни одним из доступных методов');
+          }
+        }
       }
     }
   }
