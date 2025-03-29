@@ -1,0 +1,20 @@
+{
+  "url": "http://localhost:3001",
+  "name": "Maze Router",
+  "iconUrl": "https://raw.githubusercontent.com/ton-org/blueprint/main/tonconnect/logo.png",
+  "termsOfUseUrl": "https://raw.githubusercontent.com/ton-blockchain/ton/master/LICENSE",
+  "privacyPolicyUrl": "https://raw.githubusercontent.com/ton-blockchain/ton/master/LICENSE",
+  "items": [
+    {
+      "name": "ton_addr",
+      "required": true
+    }
+  ],
+  "aboutUrl": "https://github.com/ton-org/blueprint",
+  "appVersion": "0.0.3",
+  "manifestVersion": "0.3",
+  "configVersion": "1",
+  "testnet": true,
+  "universalUrl": "https://app.tonkeeper.com/ton-connect?testnet=true",
+  "bridgeUrl": "https://bridge.tonapi.io/bridge"
+} 
