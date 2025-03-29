@@ -9,8 +9,12 @@ const API_URL = process.env.NODE_ENV === 'production'
 
 // Указываем явно режим для обхода CORS
 const API_FETCH_OPTIONS = {
-    mode: 'cors' as RequestMode,
-    credentials: 'include' as RequestCredentials,
+    mode: 'no-cors' as RequestMode,
+    credentials: 'omit' as RequestCredentials,
+    headers: {
+        'Content-Type': 'application/json',
+        'Origin': 'https://alliexchange.github.io'
+    }
 };
 
 interface CommissionInfo {
@@ -89,7 +93,9 @@ const TransferForm = () => {
                     const getUrl = `${API_URL}/calculate?amount=${encodeURIComponent(amount)}`;
                     console.log('Trying GET request:', getUrl);
                     
-                    const response = await fetch(getUrl, API_FETCH_OPTIONS);
+                    const response = await fetch(getUrl, {
+                        ...API_FETCH_OPTIONS
+                    });
                     
                     if (!response.ok) {
                         throw new Error(`GET failed with status: ${response.status}`);
@@ -106,9 +112,6 @@ const TransferForm = () => {
                 // Если GET не сработал, используем POST
                 const response = await fetch(`${API_URL}/calculate`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
                     body: JSON.stringify({ amount: parseFloat(amount) }),
                     ...API_FETCH_OPTIONS
                 });
@@ -228,7 +231,9 @@ const TransferForm = () => {
             let data;
             
             try {
-                response = await fetch(apiUrl, API_FETCH_OPTIONS);
+                response = await fetch(apiUrl, {
+                    ...API_FETCH_OPTIONS
+                });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -241,9 +246,6 @@ const TransferForm = () => {
                 try {
                     response = await fetch(`${API_URL}/transfer`, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
                         body: JSON.stringify({
                             from: tonConnectUI.connected ? tonConnectUI.account?.address : manualAddress,
                             to: addressString,

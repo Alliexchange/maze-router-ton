@@ -354,6 +354,30 @@ app.post('/api/transfer', async (req, res) => {
     }
 });
 
+// Специальный эндпоинт для проверки CORS
+app.get('/api/cors-check', (req, res) => {
+    log(`Получен запрос на проверку CORS от ${req.headers.origin}`);
+    
+    // Отвечаем специальными заголовками и информацией
+    res.json({
+        success: true,
+        message: 'CORS проверка успешна',
+        headers: {
+            'Access-Control-Allow-Origin': res.getHeader('Access-Control-Allow-Origin') || 'не установлен',
+            'Access-Control-Allow-Methods': res.getHeader('Access-Control-Allow-Methods') || 'не установлен',
+            'Access-Control-Allow-Headers': res.getHeader('Access-Control-Allow-Headers') || 'не установлен',
+            'Access-Control-Allow-Credentials': res.getHeader('Access-Control-Allow-Credentials') || 'не установлен'
+        },
+        requestInfo: {
+            origin: req.headers.origin || 'не указан',
+            method: req.method,
+            path: req.path,
+            host: req.headers.host,
+            userAgent: req.headers['user-agent']
+        }
+    });
+});
+
 // Проверка манифеста
 app.get('/tonconnect-manifest.json', (req, res) => {
     const manifestPath = path.join(__dirname, '../public/tonconnect-manifest.json');
