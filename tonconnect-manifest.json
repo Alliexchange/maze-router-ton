@@ -16,5 +16,6 @@
   "configVersion": "1",
   "testnet": true,
   "universalUrl": "https://app.tonkeeper.com/ton-connect?testnet=true",
-  "bridgeUrl": "https://bridge.tonapi.io/bridge"
+  "bridgeUrl": "https://bridge.tonapi.io/bridge",
+  "deepLinkPrefix": "tonkeeper"
 } 
