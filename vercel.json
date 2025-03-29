@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "name": "maze-router-api",
+  "builds": [
+    {
+      "src": "server/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "server/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "server/index.js"
+    }
+  ],
+  "env": {
+    "CONTRACT_ADDRESS": "EQDk2VTvn04SUKJrWJmXAZT7jh-9McgaF95Lc5vTwUtfxPtN",
+    "COMMISSION_PERCENT": "0.2",
+    "MIN_COMMISSION": "0.01",
+    "GAS_RESERVE": "0.1"
+  }
+} 

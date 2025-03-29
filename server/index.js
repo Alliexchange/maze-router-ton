@@ -4,7 +4,10 @@ const crypto = require('crypto');
 const { Address, toNano, fromNano } = require('@ton/core');
 const path = require('path');
 const fs = require('fs');
-require('dotenv').config();
+const dotenv = require('dotenv');
+
+// Загружаем переменные окружения
+dotenv.config();
 
 // Настройка логирования
 const logFile = fs.createWriteStream('server.log', { flags: 'a' });
@@ -23,26 +26,23 @@ if (!process.env.CONTRACT_ADDRESS) {
 }
 
 const app = express();
+const PORT = process.env.PORT || 3001;
 
-// Константы
-const COMMISSION_PERCENT = 0.2; // 0.2%
-const MIN_COMMISSION = 0.01; // 0.01 TON
-const GAS_RESERVE = 0.1; // 0.1 TON для газа
+// Настройка CORS для разных окружений
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'https://alliexchange.github.io'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
 
-// Middleware для логирования запросов
-app.use((req, res, next) => {
-    log(`${req.method} ${req.url}`);
-    next();
-});
-
-// CORS настройки
-app.use(cors({
-    origin: ['http://localhost:3001', 'http://127.0.0.1:3001', 'https://maze-ton.vercel.app'],
-    credentials: true,
-    methods: ['GET', 'POST', 'OPTIONS']
-}));
-
+app.use(cors(corsOptions));
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '../build')));
 
 // Проверяем наличие необходимых директорий
 const buildPath = path.join(__dirname, '../build');
@@ -79,13 +79,15 @@ function encryptAddress(address, key, iv) {
 
 // Функция расчета комиссии
 function calculateCommission(amount) {
-    const commission = Math.max(
-        amount * (COMMISSION_PERCENT / 100),
-        MIN_COMMISSION
-    );
+    const commissionPercent = process.env.COMMISSION_PERCENT || 0.2;
+    const minCommission = process.env.MIN_COMMISSION || 0.01;
+    const gasReserve = process.env.GAS_RESERVE || 0.1;
+    
+    const commission = Math.max(amount * (commissionPercent / 100), minCommission);
+    const total = amount + commission + gasReserve;
     return {
         commission,
-        total: amount + commission + GAS_RESERVE
+        total: total.toFixed(9)
     };
 }
 
@@ -94,26 +96,32 @@ app.post('/api/calculate', (req, res) => {
     try {
         const { amount } = req.body;
         
-        if (!amount || isNaN(amount) || amount <= 0) {
+        if (!amount || isNaN(parseFloat(amount))) {
             return res.status(400).json({
-                error: 'Некорректная сумма',
-                details: 'Сумма должна быть положительным числом'
+                success: false,
+                details: 'Некорректная сумма'
             });
         }
-
-        const { commission, total } = calculateCommission(parseFloat(amount));
         
-        res.json({
-            originalAmount: amount,
+        // Парсим сумму как число
+        const parsedAmount = parseFloat(amount);
+        
+        // Рассчитываем комиссию сервиса (0.2%)
+        const { commission, total } = calculateCommission(parsedAmount);
+        
+        // Возвращаем информацию о комиссии
+        return res.json({
+            success: true,
+            originalAmount: parsedAmount.toFixed(9),
             commission: commission.toFixed(9),
-            gasReserve: GAS_RESERVE,
-            total: total.toFixed(9)
+            gasReserve: gasReserve.toString(),
+            total
         });
     } catch (error) {
         log(`Ошибка при расчете комиссии: ${error.message}`);
         res.status(500).json({
-            error: 'Ошибка при расчете комиссии',
-            details: error.message
+            success: false,
+            details: 'Ошибка сервера: ' + error.message
         });
     }
 });
@@ -136,8 +144,8 @@ app.post('/api/transfer', async (req, res) => {
         if (!to || !amount) {
             log('Ошибка: отсутствуют обязательные параметры');
             return res.status(400).json({ 
-                error: 'Отсутствуют обязательные параметры',
-                details: 'Необходимо указать адрес получателя (to) и сумму (amount)'
+                success: false,
+                details: 'Некорректные параметры: необходимы to и amount'
             });
         }
         
@@ -147,11 +155,14 @@ app.post('/api/transfer', async (req, res) => {
         // Рассчитываем комиссию
         const { commission, total } = calculateCommission(parseFloat(amount));
         
-        // Генерируем ключ и IV для шифрования
-        const encryptionKey = crypto.randomBytes(32);
-        const iv = crypto.randomBytes(16);
+        // Преобразование в наноТоны (1 TON = 10^9 наноТонов)
+        const amountNano = Math.floor(parseFloat(amount) * 1000000000);
+        const commissionNano = Math.floor(commission * 1000000000);
+        const gasReserveNano = Math.floor(gasReserve * 1000000000);
         
         // Шифруем адрес получателя
+        const encryptionKey = crypto.randomBytes(32);
+        const iv = crypto.randomBytes(16);
         const encryptedAddress = encryptAddress(
             targetAddress.toString(),
             encryptionKey,
@@ -167,9 +178,9 @@ app.post('/api/transfer', async (req, res) => {
 
         const response = {
             contractAddress: process.env.CONTRACT_ADDRESS || 'EQDk2VTvn04SUKJrWJmXAZT7jh-9McgaF95Lc5vTwUtfxPtN',
-            amount: toNano(total).toString(),
+            amount: String(amountNano + commissionNano + gasReserveNano),
             commission: toNano(commission).toString(),
-            gasReserve: toNano(GAS_RESERVE).toString(),
+            gasReserve: toNano(gasReserve).toString(),
             encryptedPayload: payload.toString('base64')
         };
 
@@ -178,8 +189,8 @@ app.post('/api/transfer', async (req, res) => {
     } catch (error) {
         log(`Ошибка при обработке запроса: ${error.message}`);
         res.status(500).json({ 
-            error: 'Ошибка при создании транзакции',
-            details: error.message 
+            success: false,
+            details: 'Ошибка сервера: ' + error.message 
         });
     }
 });
@@ -209,8 +220,6 @@ app.get('*', (req, res) => {
     
     res.sendFile(indexPath);
 });
-
-const PORT = process.env.PORT || 3001;
 
 // Создаем HTTP сервер
 try {

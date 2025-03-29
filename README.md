@@ -47,6 +47,43 @@ Maze Router - это приложение для анонимного маршр
    http://localhost:3001
    ```
 
+## Деплой
+
+### Frontend (GitHub Pages)
+
+Клиентская часть приложения размещена на GitHub Pages:
+
+1. Обновите `homepage` в package.json:
+   ```json
+   "homepage": "https://ваше-имя-пользователя.github.io/maze-router-ton"
+   ```
+
+2. Выполните команду:
+   ```
+   npm run deploy-pages
+   ```
+
+### Backend (Vercel)
+
+Серверная часть может быть размещена на Vercel:
+
+1. Установите Vercel CLI:
+   ```
+   npm install -g vercel
+   ```
+
+2. Авторизуйтесь в Vercel:
+   ```
+   vercel login
+   ```
+
+3. Выполните команду для деплоя:
+   ```
+   npm run deploy-server
+   ```
+
+4. После деплоя, обновите `API_URL` в файлах `src/App.js` и `src/components/TransferForm.tsx` на URL вашего Vercel проекта.
+
 ## Особенности работы с TonConnect
 
 ### Локальное тестирование

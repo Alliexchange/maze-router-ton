@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { TonConnectButton } from '@tonconnect/ui-react';
 import './App.css';
 
+// API URL - локальный для разработки, или публичный для продакшн
+const API_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://maze-router-api.vercel.app/api' // Замените на URL вашего API сервера
+  : 'http://localhost:3001/api';
+
 function App() {
   const [targetWallet, setTargetWallet] = useState('');
   const [amount, setAmount] = useState('');
@@ -9,7 +14,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3001/api/transfer', {
+      const response = await fetch(`${API_URL}/transfer`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

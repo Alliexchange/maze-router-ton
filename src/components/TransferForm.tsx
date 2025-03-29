@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { TonConnectButton, useTonConnectUI } from '@tonconnect/ui-react';
 import { Address } from '@ton/core';
 
+// API URL - локальный для разработки, или публичный для продакшн
+const API_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://maze-router-api.vercel.app/api' // Замените на URL вашего API сервера
+  : 'http://localhost:3001/api';
+
 interface CommissionInfo {
     originalAmount: string;
     commission: string;
@@ -71,7 +76,7 @@ const TransferForm = () => {
             }
 
             try {
-                const response = await fetch('http://localhost:3001/api/calculate', {
+                const response = await fetch(`${API_URL}/calculate`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -170,7 +175,7 @@ const TransferForm = () => {
             
             // Отправляем запрос на сервер для создания транзакции
             console.log('Sending transfer request...');
-            const response = await fetch('http://localhost:3001/api/transfer', {
+            const response = await fetch(`${API_URL}/transfer`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

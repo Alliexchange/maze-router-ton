@@ -2,7 +2,7 @@
   "name": "maze-ton",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://GITHUB_USERNAME.github.io/maze-router-ton",
+  "homepage": "https://Alliexchange.github.io/maze-router-ton",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -37,7 +37,8 @@
     "compile": "ts-node scripts/compile.ts",
     "deploy": "ts-node scripts/deploy.ts",
     "predeploy": "npm run build",
-    "deploy-pages": "gh-pages -d build"
+    "deploy-pages": "gh-pages -d build",
+    "deploy-server": "vercel --prod"
   },
   "eslintConfig": {
     "extends": [
@@ -58,7 +59,7 @@
     ]
   },
   "devDependencies": {
-    "ts-node": "^10.9.2",
-    "gh-pages": "^6.1.1"
+    "gh-pages": "^6.3.0",
+    "ts-node": "^10.9.2"
   }
 }

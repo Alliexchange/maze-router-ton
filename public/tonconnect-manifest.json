@@ -1,5 +1,5 @@
 {
-  "url": "http://localhost:3001",
+  "url": "https://alliexchange.github.io/maze-router-ton",
   "name": "Maze Router",
   "iconUrl": "https://raw.githubusercontent.com/ton-org/blueprint/main/tonconnect/logo.png",
   "termsOfUseUrl": "https://raw.githubusercontent.com/ton-blockchain/ton/master/LICENSE",
