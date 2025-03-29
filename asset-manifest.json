@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/maze-router-ton/static/css/main.5520a134.css",
-    "main.js": "/maze-router-ton/static/js/main.4c628555.js",
+    "main.js": "/maze-router-ton/static/js/main.bff33079.js",
     "index.html": "/maze-router-ton/index.html",
     "main.5520a134.css.map": "/maze-router-ton/static/css/main.5520a134.css.map",
-    "main.4c628555.js.map": "/maze-router-ton/static/js/main.4c628555.js.map"
+    "main.bff33079.js.map": "/maze-router-ton/static/js/main.bff33079.js.map"
   },
   "entrypoints": [
     "static/css/main.5520a134.css",
-    "static/js/main.4c628555.js"
+    "static/js/main.bff33079.js"
   ]
 }
