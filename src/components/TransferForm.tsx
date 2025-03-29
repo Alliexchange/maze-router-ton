@@ -2,10 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { TonConnectButton, useTonConnectUI } from '@tonconnect/ui-react';
 import { Address } from '@ton/core';
 
-// Базовые URL для API и CORS прокси
-const API_BASE_URL = 'https://maze-router-api.vercel.app/api';
-const CORS_PROXY = 'https://corsproxy.io/?';
-
 // Интерфейс для ответа от API при расчете комиссии
 interface CommissionResponse {
   commission: string;
@@ -20,49 +16,31 @@ interface CommissionInfo {
   total: string;
 }
 
-// Простая функция для запросов через CORS прокси
-async function fetchApi(endpoint: string, params: any = {}, method: string = 'GET'): Promise<any> {
+// Функция для запросов к API через готовый прокси из window.DirectMazeAPI
+async function safeApiCall<T>(
+  method: 'calculateCommission' | 'prepareTransfer',
+  params: any
+): Promise<T> {
+  console.log(`API запрос через DirectMazeAPI.${method}:`, params);
+  
   try {
-    console.log(`API запрос: ${endpoint}, метод: ${method}, параметры:`, params);
-
-    // Полный URL API-эндпоинта
-    const apiUrl = `${API_BASE_URL}/${endpoint}`;
-    
-    // URL с прокси
-    let url: string;
-    let options: RequestInit = { 
-      method,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    };
-
-    if (method === 'GET') {
-      // Для GET запросов добавляем параметры в URL
-      const queryParams = new URLSearchParams();
-      Object.keys(params).forEach(key => {
-        queryParams.append(key, params[key]);
-      });
+    if (window.DirectMazeAPI && typeof window.DirectMazeAPI[method] === 'function') {
+      // Используем глобальный объект DirectMazeAPI
+      let result;
       
-      // Формируем URL через прокси
-      url = `${CORS_PROXY}${encodeURIComponent(`${apiUrl}?${queryParams.toString()}`)}`;
+      if (method === 'calculateCommission') {
+        result = await window.DirectMazeAPI.calculateCommission(params.amount);
+      } else if (method === 'prepareTransfer') {
+        result = await window.DirectMazeAPI.prepareTransfer(params.to, params.amount);
+      }
+      
+      console.log(`Результат запроса ${method}:`, result);
+      return result as T;
     } else {
-      // Для POST запросов отправляем параметры в теле
-      url = `${CORS_PROXY}${encodeURIComponent(apiUrl)}`;
-      options.body = JSON.stringify(params);
+      throw new Error(`DirectMazeAPI.${method} не найден. Проверьте, что скрипт загружен`);
     }
-    
-    console.log(`Отправка запроса через прокси: ${url}`);
-    
-    const response = await fetch(url, options);
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    return await response.json();
   } catch (error) {
-    console.error('Ошибка API запроса:', error);
+    console.error(`Ошибка при вызове API (${method}):`, error);
     throw error;
   }
 }
@@ -124,8 +102,8 @@ const TransferForm = () => {
         const amountNum = parseFloat(amount);
         console.log('Расчет комиссии для суммы:', amountNum);
         
-        // Запрос через CORS прокси
-        const result = await fetchApi('calculate', { amount: amountNum }, 'GET');
+        // Используем safeApiCall для обращения к API
+        const result = await safeApiCall<any>('calculateCommission', { amount: amountNum });
         console.log('Результат расчета комиссии:', result);
         
         if (result.success) {
@@ -202,11 +180,11 @@ const TransferForm = () => {
       
       console.log(`Отправка транзакции: to=${targetAddress}, amount=${amount}`);
       
-      // Запрос через CORS прокси
-      const result = await fetchApi('transfer', {
+      // Используем safeApiCall для подготовки транзакции
+      const result = await safeApiCall<any>('prepareTransfer', {
         to: targetAddress,
         amount: parseFloat(amount)
-      }, 'POST');
+      });
       
       console.log('Результат подготовки транзакции:', result);
       
@@ -258,7 +236,7 @@ const TransferForm = () => {
   // Функция для тестирования прокси
   const testProxy = async () => {
     try {
-      const result = await fetchApi('calculate', { amount: 1 }, 'GET');
+      const result = await safeApiCall<any>('calculateCommission', { amount: 1 });
       alert(`Прокси работает! Результат: ${JSON.stringify(result)}`);
     } catch (err) {
       alert(`Ошибка при тестировании прокси: ${err instanceof Error ? err.message : String(err)}`);
@@ -327,5 +305,15 @@ const TransferForm = () => {
     </div>
   );
 };
+
+// Добавляем типы для глобальных объектов API
+declare global {
+  interface Window {
+    DirectMazeAPI?: {
+      calculateCommission: (amount: number) => Promise<any>;
+      prepareTransfer: (to: string, amount: number) => Promise<any>;
+    };
+  }
+}
 
 export default TransferForm; 
