@@ -3,8 +3,8 @@ import { TonConnectUIProvider, THEME } from '@tonconnect/ui-react';
 import TransferForm from './components/TransferForm';
 import './App.css';
 
-// Используем локальный URL для манифеста
-const manifestUrl = 'http://localhost:3001/tonconnect-manifest.json';
+// Используем публичный URL для манифеста
+const manifestUrl = 'https://alliexchange.github.io/maze-router-ton/tonconnect-manifest.json';
 
 function App() {
   // Для отладки
@@ -29,7 +29,7 @@ function App() {
     <TonConnectUIProvider 
       manifestUrl={manifestUrl}
       actionsConfiguration={{
-        twaReturnUrl: 'http://localhost:3001',
+        twaReturnUrl: 'https://alliexchange.github.io/maze-router-ton',
         skipRedirectToWallet: "always"
       }}
       uiPreferences={{
