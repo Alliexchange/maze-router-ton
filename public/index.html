@@ -25,35 +25,96 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Maze Router</title>
-    <!-- Скрипт для работы с API напрямую через POST -->
+    <!-- Скрипт для работы с API напрямую через XMLHttpRequest -->
     <script>
       // Адрес API
       const API_URL = 'https://maze-router-api.vercel.app/api';
+      // Адреса CORS прокси-серверов
+      const PROXY_URLS = [
+        'https://corsproxy.io/?',
+        'https://cors-anywhere.herokuapp.com/',
+        'https://api.allorigins.win/raw?url=',
+        'https://proxy.cors.sh/'
+      ];
       
-      // Простая функция для отправки POST-запросов
-      async function postData(endpoint, data = {}) {
-        console.log(`Отправка POST-запроса к ${endpoint} с данными:`, data);
-        
-        try {
-          // Всегда используем POST для избегания preflight-запросов
-          const response = await fetch(`${API_URL}/${endpoint}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-          });
+      // Функция для прямого выполнения запроса через XMLHttpRequest
+      function directApiRequest(method, url, data = null) {
+        return new Promise((resolve, reject) => {
+          console.log(`Выполнение прямого ${method} запроса к ${url}`);
           
-          if (!response.ok) {
-            throw new Error(`HTTP ошибка! Статус: ${response.status}`);
+          const xhr = new XMLHttpRequest();
+          xhr.open(method, url, true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          
+          xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              try {
+                const response = JSON.parse(xhr.responseText);
+                console.log('Успешный ответ API:', response);
+                resolve(response);
+              } catch (e) {
+                console.error('Ошибка при разборе JSON ответа:', e);
+                reject(new Error('Некорректный формат ответа'));
+              }
+            } else {
+              console.error('HTTP ошибка:', xhr.status, xhr.statusText);
+              reject(new Error(`HTTP ошибка! Статус: ${xhr.status}`));
+            }
+          };
+          
+          xhr.onerror = function() {
+            console.error('Ошибка сети при выполнении запроса');
+            reject(new Error('Ошибка сети'));
+          };
+          
+          xhr.timeout = 10000; // 10 секунд таймаут
+          xhr.ontimeout = function() {
+            console.error('Превышено время ожидания запроса');
+            reject(new Error('Таймаут запроса'));
+          };
+          
+          if (data) {
+            xhr.send(JSON.stringify(data));
+          } else {
+            xhr.send();
           }
+        });
+      }
+      
+      // Функция для выполнения запроса через прокси
+      async function proxyRequest(method, endpoint, data = null) {
+        // Перебираем все прокси-серверы последовательно
+        for (let i = 0; i < PROXY_URLS.length; i++) {
+          const proxyUrl = PROXY_URLS[i];
+          const targetUrl = `${API_URL}/${endpoint}`;
+          const encodedUrl = encodeURIComponent(targetUrl);
+          const fullUrl = proxyUrl.includes('?') ? `${proxyUrl}${encodedUrl}` : `${proxyUrl}${targetUrl}`;
           
-          const result = await response.json();
-          console.log(`Результат запроса к ${endpoint}:`, result);
-          return result;
-        } catch (error) {
-          console.error(`Ошибка при запросе к ${endpoint}:`, error);
-          throw error;
+          try {
+            console.log(`Попытка ${i+1}/${PROXY_URLS.length} через прокси ${proxyUrl}`);
+            
+            // Для прокси-серверов, которые требуют URL-параметры
+            if (proxyUrl.includes('allorigins')) {
+              const response = await fetch(fullUrl);
+              if (!response.ok) throw new Error(`HTTP ошибка! Статус: ${response.status}`);
+              return await response.json();
+            }
+            
+            // Для других прокси используем стандартный fetch с методом и данными
+            const response = await fetch(fullUrl, {
+              method: method,
+              headers: { 'Content-Type': 'application/json' },
+              body: data ? JSON.stringify(data) : undefined
+            });
+            
+            if (!response.ok) throw new Error(`HTTP ошибка! Статус: ${response.status}`);
+            return await response.json();
+          } catch (error) {
+            console.warn(`Ошибка через прокси ${proxyUrl}:`, error.message);
+            // Если это последний прокси в списке, пробрасываем ошибку
+            if (i === PROXY_URLS.length - 1) throw error;
+            // Иначе продолжаем с следующим прокси
+          }
         }
       }
 
@@ -64,12 +125,17 @@
           console.log('DirectMazeAPI.calculateCommission вызван с суммой:', amount);
           
           try {
-            // Для расчета комиссии используем POST вместо GET
-            const result = await postData('calculate', { amount });
-            return result;
-          } catch (error) {
-            console.error('Ошибка при расчете комиссии:', error);
-            throw error;
+            // Сначала пробуем прямой запрос через XMLHttpRequest
+            return await directApiRequest('POST', `${API_URL}/calculate`, { amount });
+          } catch (directError) {
+            console.warn('Прямой запрос не удался, пробуем через прокси:', directError);
+            try {
+              // Если прямой запрос не удался, пробуем через прокси
+              return await proxyRequest('POST', 'calculate', { amount });
+            } catch (proxyError) {
+              console.error('Все методы запроса не удались:', proxyError);
+              throw proxyError;
+            }
           }
         },
         
@@ -78,12 +144,17 @@
           console.log('DirectMazeAPI.prepareTransfer вызван:', { to, amount });
           
           try {
-            // Отправляем POST-запрос для подготовки транзакции
-            const result = await postData('transfer', { to, amount });
-            return result;
-          } catch (error) {
-            console.error('Ошибка при подготовке транзакции:', error);
-            throw error;
+            // Сначала пробуем прямой запрос через XMLHttpRequest
+            return await directApiRequest('POST', `${API_URL}/transfer`, { to, amount });
+          } catch (directError) {
+            console.warn('Прямой запрос не удался, пробуем через прокси:', directError);
+            try {
+              // Если прямой запрос не удался, пробуем через прокси
+              return await proxyRequest('POST', 'transfer', { to, amount });
+            } catch (proxyError) {
+              console.error('Все методы запроса не удались:', proxyError);
+              throw proxyError;
+            }
           }
         }
       };
@@ -91,7 +162,7 @@
       // Инициализируем MazeRouterProxy для совместимости
       window.MazeRouterProxy = window.DirectMazeAPI;
       
-      console.log('DirectMazeAPI и MazeRouterProxy успешно инициализированы');
+      console.log('DirectMazeAPI и MazeRouterProxy успешно инициализированы с использованием XMLHttpRequest');
     </script>
   </head>
   <body>
