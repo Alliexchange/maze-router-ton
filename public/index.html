@@ -25,108 +25,40 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Maze Router</title>
-    
-    <!-- Скрипт для работы с API через CORS прокси -->
+    <!-- Подключаем скрипты для обхода CORS -->
+    <script src="%PUBLIC_URL%/proxy.js"></script>
+    <script src="%PUBLIC_URL%/cors-worker.js"></script>
+    <!-- Скрипт для работы с API напрямую через POST -->
     <script>
-      // Оригинальный fetch
-      const originalFetch = window.fetch;
-      
       // Адрес API
       const API_URL = 'https://maze-router-api.vercel.app/api';
       
-      // Возможные CORS прокси
-      const PROXY_OPTIONS = [
-        // Основной прокси - CORS Anywhere на Heroku
-        'https://cors-anywhere.herokuapp.com/',
-        // Резервные прокси
-        'https://api.allorigins.win/raw?url=',
-        'https://proxy.cors.sh/'
-      ];
-      
-      // Текущий индекс прокси
-      let currentProxyIndex = 0;
-      
-      // Функция для получения следующего прокси
-      function getNextProxy() {
-        currentProxyIndex = (currentProxyIndex + 1) % PROXY_OPTIONS.length;
-        return PROXY_OPTIONS[currentProxyIndex];
-      }
-      
-      // Получаем текущий прокси
-      function getCurrentProxy() {
-        return PROXY_OPTIONS[currentProxyIndex];
-      }
-      
-      // Монки-патчинг fetch
-      window.fetch = function(resource, options) {
-        let url = resource;
-        if (resource instanceof Request) {
-          url = resource.url;
-        }
+      // Простая функция для отправки POST-запросов
+      async function postData(endpoint, data = {}) {
+        console.log(`Отправка POST-запроса к ${endpoint} с данными:`, data);
         
-        console.log('ПЕРЕХВАТ FETCH:', url);
-        
-        // Проверяем, не является ли запрос обращением к API
-        if (typeof url === 'string' && url.includes('maze-router-api.vercel.app')) {
-          console.log('Перехвачен запрос к API:', url);
+        try {
+          // Всегда используем POST для избегания preflight-запросов
+          const response = await fetch(`${API_URL}/${endpoint}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+          });
           
-          // Преобразуем в прокси-запрос
-          const proxy = getCurrentProxy();
-          const proxyUrl = `${proxy}${encodeURIComponent(url)}`;
-          console.log('Перенаправляем через прокси:', proxyUrl);
-          
-          // Настраиваем запрос для работы с прокси
-          const proxyOptions = {...options};
-          
-          // Добавляем необходимые заголовки в зависимости от прокси
-          if (proxy.includes('cors-anywhere')) {
-            proxyOptions.headers = proxyOptions.headers || {};
-            proxyOptions.headers = {
-              ...proxyOptions.headers,
-              'X-Requested-With': 'XMLHttpRequest'
-            };
-          } else if (proxy.includes('cors.sh')) {
-            proxyOptions.headers = proxyOptions.headers || {};
-            proxyOptions.headers = {
-              ...proxyOptions.headers,
-              'x-cors-api-key': 'temp_86b532e91d7d57c9eb22a58f4aa2e7a4'
-            };
+          if (!response.ok) {
+            throw new Error(`HTTP ошибка! Статус: ${response.status}`);
           }
           
-          return originalFetch(proxyUrl, proxyOptions)
-            .catch(error => {
-              console.error('Ошибка прокси:', error);
-              console.log('Пробуем следующий прокси...');
-              
-              // Переключаемся на следующий прокси и повторяем запрос
-              const nextProxy = getNextProxy();
-              const nextProxyUrl = `${nextProxy}${encodeURIComponent(url)}`;
-              console.log('Повторный запрос через прокси:', nextProxyUrl);
-              
-              // Настраиваем запрос для работы с новым прокси
-              const nextProxyOptions = {...options};
-              
-              if (nextProxy.includes('cors-anywhere')) {
-                nextProxyOptions.headers = nextProxyOptions.headers || {};
-                nextProxyOptions.headers = {
-                  ...nextProxyOptions.headers,
-                  'X-Requested-With': 'XMLHttpRequest'
-                };
-              } else if (nextProxy.includes('cors.sh')) {
-                nextProxyOptions.headers = nextProxyOptions.headers || {};
-                nextProxyOptions.headers = {
-                  ...nextProxyOptions.headers,
-                  'x-cors-api-key': 'temp_86b532e91d7d57c9eb22a58f4aa2e7a4'
-                };
-              }
-              
-              return originalFetch(nextProxyUrl, nextProxyOptions);
-            });
+          const result = await response.json();
+          console.log(`Результат запроса к ${endpoint}:`, result);
+          return result;
+        } catch (error) {
+          console.error(`Ошибка при запросе к ${endpoint}:`, error);
+          throw error;
         }
-        
-        // Для других запросов используем оригинальный fetch
-        return originalFetch(resource, options);
-      };
+      }
 
       // Глобальный объект для работы с API
       window.DirectMazeAPI = {
@@ -135,19 +67,8 @@
           console.log('DirectMazeAPI.calculateCommission вызван с суммой:', amount);
           
           try {
-            // Формируем URL с параметрами
-            const url = `${API_URL}/calculate?amount=${amount}`;
-            console.log('Запрос на расчет комиссии:', url);
-            
-            const response = await fetch(url);
-            
-            if (!response.ok) {
-              throw new Error(`HTTP ошибка! статус: ${response.status}`);
-            }
-            
-            const result = await response.json();
-            console.log('Результат расчета комиссии:', result);
-            
+            // Для расчета комиссии используем POST вместо GET
+            const result = await postData('calculate', { amount });
             return result;
           } catch (error) {
             console.error('Ошибка при расчете комиссии:', error);
@@ -160,25 +81,8 @@
           console.log('DirectMazeAPI.prepareTransfer вызван:', { to, amount });
           
           try {
-            // Формируем URL для POST запроса
-            const url = `${API_URL}/transfer`;
-            console.log('Запрос на подготовку транзакции:', url);
-            
-            const response = await fetch(url, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ to, amount })
-            });
-            
-            if (!response.ok) {
-              throw new Error(`HTTP ошибка! статус: ${response.status}`);
-            }
-            
-            const result = await response.json();
-            console.log('Результат подготовки транзакции:', result);
-            
+            // Отправляем POST-запрос для подготовки транзакции
+            const result = await postData('transfer', { to, amount });
             return result;
           } catch (error) {
             console.error('Ошибка при подготовке транзакции:', error);
