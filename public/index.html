@@ -26,14 +26,36 @@
     -->
     <title>Maze Router</title>
     
-    <!-- Скрипт для работы с API через corsproxy.io -->
+    <!-- Скрипт для работы с API через CORS прокси -->
     <script>
       // Оригинальный fetch
       const originalFetch = window.fetch;
       
       // Адрес API
       const API_URL = 'https://maze-router-api.vercel.app/api';
-      const CORS_PROXY = 'https://corsproxy.io/?';
+      
+      // Возможные CORS прокси
+      const PROXY_OPTIONS = [
+        // Основной прокси - CORS Anywhere на Heroku
+        'https://cors-anywhere.herokuapp.com/',
+        // Резервные прокси
+        'https://api.allorigins.win/raw?url=',
+        'https://proxy.cors.sh/'
+      ];
+      
+      // Текущий индекс прокси
+      let currentProxyIndex = 0;
+      
+      // Функция для получения следующего прокси
+      function getNextProxy() {
+        currentProxyIndex = (currentProxyIndex + 1) % PROXY_OPTIONS.length;
+        return PROXY_OPTIONS[currentProxyIndex];
+      }
+      
+      // Получаем текущий прокси
+      function getCurrentProxy() {
+        return PROXY_OPTIONS[currentProxyIndex];
+      }
       
       // Монки-патчинг fetch
       window.fetch = function(resource, options) {
@@ -49,10 +71,57 @@
           console.log('Перехвачен запрос к API:', url);
           
           // Преобразуем в прокси-запрос
-          const proxyUrl = `${CORS_PROXY}${encodeURIComponent(url)}`;
+          const proxy = getCurrentProxy();
+          const proxyUrl = `${proxy}${encodeURIComponent(url)}`;
           console.log('Перенаправляем через прокси:', proxyUrl);
           
-          return originalFetch(proxyUrl, options);
+          // Настраиваем запрос для работы с прокси
+          const proxyOptions = {...options};
+          
+          // Добавляем необходимые заголовки в зависимости от прокси
+          if (proxy.includes('cors-anywhere')) {
+            proxyOptions.headers = proxyOptions.headers || {};
+            proxyOptions.headers = {
+              ...proxyOptions.headers,
+              'X-Requested-With': 'XMLHttpRequest'
+            };
+          } else if (proxy.includes('cors.sh')) {
+            proxyOptions.headers = proxyOptions.headers || {};
+            proxyOptions.headers = {
+              ...proxyOptions.headers,
+              'x-cors-api-key': 'temp_86b532e91d7d57c9eb22a58f4aa2e7a4'
+            };
+          }
+          
+          return originalFetch(proxyUrl, proxyOptions)
+            .catch(error => {
+              console.error('Ошибка прокси:', error);
+              console.log('Пробуем следующий прокси...');
+              
+              // Переключаемся на следующий прокси и повторяем запрос
+              const nextProxy = getNextProxy();
+              const nextProxyUrl = `${nextProxy}${encodeURIComponent(url)}`;
+              console.log('Повторный запрос через прокси:', nextProxyUrl);
+              
+              // Настраиваем запрос для работы с новым прокси
+              const nextProxyOptions = {...options};
+              
+              if (nextProxy.includes('cors-anywhere')) {
+                nextProxyOptions.headers = nextProxyOptions.headers || {};
+                nextProxyOptions.headers = {
+                  ...nextProxyOptions.headers,
+                  'X-Requested-With': 'XMLHttpRequest'
+                };
+              } else if (nextProxy.includes('cors.sh')) {
+                nextProxyOptions.headers = nextProxyOptions.headers || {};
+                nextProxyOptions.headers = {
+                  ...nextProxyOptions.headers,
+                  'x-cors-api-key': 'temp_86b532e91d7d57c9eb22a58f4aa2e7a4'
+                };
+              }
+              
+              return originalFetch(nextProxyUrl, nextProxyOptions);
+            });
         }
         
         // Для других запросов используем оригинальный fetch
@@ -66,8 +135,8 @@
           console.log('DirectMazeAPI.calculateCommission вызван с суммой:', amount);
           
           try {
-            // Формируем URL с параметрами через CORS прокси
-            const url = `${CORS_PROXY}${encodeURIComponent(`${API_URL}/calculate?amount=${amount}`)}`;
+            // Формируем URL с параметрами
+            const url = `${API_URL}/calculate?amount=${amount}`;
             console.log('Запрос на расчет комиссии:', url);
             
             const response = await fetch(url);
@@ -91,8 +160,8 @@
           console.log('DirectMazeAPI.prepareTransfer вызван:', { to, amount });
           
           try {
-            // Формируем URL для POST запроса через CORS прокси
-            const url = `${CORS_PROXY}${encodeURIComponent(`${API_URL}/transfer`)}`;
+            // Формируем URL для POST запроса
+            const url = `${API_URL}/transfer`;
             console.log('Запрос на подготовку транзакции:', url);
             
             const response = await fetch(url, {
