@@ -1,252 +1,456 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Отладка подключения к Tonkeeper</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #f5f5f5;
-    }
-    
-    .container {
-      background-color: white;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    
-    h1 {
-      color: #0088CC;
-      text-align: center;
-    }
-    
-    .buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 20px 0;
-    }
-    
-    button {
-      padding: 10px 15px;
-      background-color: #0088CC;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      flex: 1;
-      min-width: 200px;
-    }
-    
-    button:hover {
-      background-color: #006699;
-    }
-    
-    details {
-      margin: 15px 0;
-      padding: 10px;
-      background-color: #f9f9f9;
-      border-radius: 4px;
-      border: 1px solid #eee;
-    }
-    
-    summary {
-      cursor: pointer;
-      font-weight: bold;
-      padding: 5px 0;
-    }
-    
-    .url-box {
-      background-color: #eee;
-      padding: 10px;
-      border-radius: 4px;
-      word-break: break-all;
-      margin: 10px 0;
-    }
-    
-    #testApiResults {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #f0f8ff;
-      border: 1px solid #cce;
-      border-radius: 4px;
-      display: none;
-    }
-    
-    pre {
-      background-color: #333;
-      color: #fff;
-      padding: 10px;
-      border-radius: 4px;
-      overflow-x: auto;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze - TON Router</title>
+    <script src="https://unpkg.com/@tonconnect/sdk@2.1.3/dist/tonconnect-sdk.min.js"></script>
+    <script src="https://unpkg.com/@tonconnect/ui@1.1.1/dist/tonconnect-ui.min.js"></script>
+    <script src="https://unpkg.com/@orbs-network/ton-access@2.3.3/dist/index.browser.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #45AEF5;
+            --primary-hover: #3498db;
+            --bg-dark: #0F1419;
+            --bg-card: #1A1F25;
+            --text-primary: #fff;
+            --text-secondary: #B4B8BC;
+            --border-color: #2D3239;
+            --error-color: #FF4B55;
+            --success-color: #4CAF50;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1E2328 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .maze-logo {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            position: relative;
+            text-shadow: 0 0 20px rgba(69, 174, 245, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px rgba(69, 174, 245, 0.3);
+            }
+            to {
+                text-shadow: 0 0 30px rgba(69, 174, 245, 0.6);
+            }
+        }
+
+        .maze-logo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 2px;
+            box-shadow: 0 0 20px rgba(69, 174, 245, 0.5);
+            animation: lineWidth 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes lineWidth {
+            from {
+                width: 40px;
+            }
+            to {
+                width: 80px;
+            }
+        }
+
+        .container {
+            background: linear-gradient(135deg, rgba(26, 31, 37, 0.8) 0%, rgba(45, 50, 57, 0.8) 100%);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 480px;
+            margin: 0 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .form-group:focus-within label {
+            color: var(--primary-color);
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 16px;
+            background: rgba(45, 50, 57, 0.3);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(69, 174, 245, 0.1);
+            background: rgba(45, 50, 57, 0.5);
+        }
+
+        input[type="text"]::placeholder, input[type="number"]::placeholder {
+            color: rgba(180, 184, 188, 0.5);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 32px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(69, 174, 245, 0.3);
+        }
+
+        .status {
+            margin-top: 24px;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 500;
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .status.error {
+            background: rgba(255, 75, 85, 0.1);
+            color: var(--error-color);
+            border: 1px solid rgba(255, 75, 85, 0.2);
+        }
+
+        .status.success {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .loading {
+            text-align: center;
+            display: none;
+            margin: 24px 0;
+            color: var(--primary-color);
+            font-weight: 500;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .loading::after {
+            content: "...";
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: "."; }
+            40% { content: ".."; }
+            60%, 100% { content: "..."; }
+        }
+
+        #walletInfo {
+            margin: 24px 0;
+            padding: 24px;
+            background: rgba(45, 50, 57, 0.3);
+            border-radius: 16px;
+            display: none;
+            border: 1px solid var(--border-color);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        #walletInfo h3 {
+            color: var(--primary-color);
+            margin: 0 0 16px 0;
+            font-size: 18px;
+        }
+
+        .network-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .network-badge.testnet {
+            background: rgba(255, 152, 0, 0.1);
+            color: #FF9800;
+            border: 1px solid rgba(255, 152, 0, 0.2);
+        }
+
+        .network-badge.mainnet {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+            padding: 8px 12px;
+            background: rgba(255, 75, 85, 0.1);
+            border-radius: 8px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        #tonconnect-button {
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 30px;
+            }
+
+            .maze-logo {
+                font-size: 36px;
+            }
+
+            input[type="text"], input[type="number"] {
+                font-size: 16px;
+            }
+
+            button {
+                padding: 14px 28px;
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Отладка подключения к Tonkeeper</h1>
-    
-    <div class="buttons">
-      <button id="openAppBtn">Открыть в Tonkeeper (приложение)</button>
-      <button id="openWebBtn">Открыть в Tonkeeper (веб-версия)</button>
+    <div class="logo-container">
+        <div class="maze-logo">MAZE</div>
     </div>
-    
-    <details>
-      <summary>URL манифеста</summary>
-      <div class="url-box" id="manifestUrl">https://alliexchange.github.io/maze-router-ton/tonconnect-manifest.json</div>
-    </details>
-    
-    <details>
-      <summary>Universal URL</summary>
-      <div class="url-box" id="universalUrl"></div>
-    </details>
-    
-    <details>
-      <summary>Прямая ссылка</summary>
-      <div class="url-box" id="directLink"></div>
-    </details>
-    
-    <div>
-      <h2>Проверка API</h2>
-      <div class="buttons">
-        <button id="testCalculateBtn">Проверить расчет комиссии</button>
-        <button id="testTransferBtn">Проверить подготовку перевода</button>
-        <button id="testVercelCors">Проверить CORS на Vercel</button>
-      </div>
-      
-      <div id="testApiResults">
-        <h3>Результаты проверки API</h3>
-        <pre id="apiResponseContent">Результаты будут здесь</pre>
-      </div>
-    </div>
-  </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Закодированный URL манифеста
-      const manifestUrl = 'https://alliexchange.github.io/maze-router-ton/tonconnect-manifest.json';
-      const encodedManifestUrl = encodeURIComponent(manifestUrl);
-      
-      // Universal URL для Tonkeeper
-      const universalUrl = `ton://connect?v=2&r=${encodedManifestUrl}&relay=https%3A%2F%2Ftcr.tonapi.io%2F`;
-      document.getElementById('universalUrl').textContent = universalUrl;
-      
-      // Прямая ссылка для открытия Tonkeeper Web
-      const directLink = `https://app.tonkeeper.com/dapp/${encodedManifestUrl}?testnet=true`;
-      document.getElementById('directLink').textContent = directLink;
-      
-      // Обработчики кнопок
-      document.getElementById('openAppBtn').addEventListener('click', function() {
-        window.location.href = universalUrl;
-      });
-      
-      document.getElementById('openWebBtn').addEventListener('click', function() {
-        window.open(directLink, '_blank');
-      });
-      
-      // Тестирование API
-      document.getElementById('testCalculateBtn').addEventListener('click', async function() {
-        const resultDiv = document.getElementById('testApiResults');
-        const responseContent = document.getElementById('apiResponseContent');
-        resultDiv.style.display = 'block';
+    <div class="container">
+        <div id="tonconnect-button"></div>
         
-        try {
-          responseContent.textContent = 'Загрузка...';
-          
-          // Используем прокси-сервис для обхода CORS
-          const proxyUrl = 'https://api.allorigins.win/get?url=';
-          const apiUrl = encodeURIComponent('https://maze-router-api.vercel.app/api/calculate?amount=1');
-          
-          const response = await fetch(proxyUrl + apiUrl);
-          const data = await response.json();
-          
-          if (data && data.contents) {
+        <div id="walletInfo">
+            <h3>Кошелек подключен</h3>
+            <p id="walletAddress"></p>
+            <p id="networkInfo"></p>
+        </div>
+        
+        <div id="sendForm" style="display:none;">
+            <div class="form-group">
+                <label for="receiverAddress">Адрес кошелька получателя</label>
+                <input type="text" id="receiverAddress" placeholder="Введите адрес EQAbc..." required>
+                <div id="addressError" class="error-message"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="amount">Сумма (TON)</label>
+                <input type="number" id="amount" min="0.01" step="0.01" value="0.1" placeholder="Введите сумму" required>
+                <div id="amountError" class="error-message"></div>
+            </div>
+            
+            <button id="sendTransaction">Отправить транзакцию</button>
+        </div>
+        
+        <div class="loading" id="loading">Загрузка</div>
+        
+        <div class="status" id="status"></div>
+        
+        <div class="result" id="result" style="display: none;">
+            <h3>Детали транзакции:</h3>
+            <div id="resultDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        const tonConnectUI = new TonConnectUI.TonConnectUI({
+            manifestUrl: "https://maze-router.vercel.app/maze-manifest.json",
+            buttonRootId: "tonconnect-button"
+        });
+
+        let walletAddress = '';
+        let isTestnet = false;
+
+        tonConnectUI.onStatusChange(async (wallet) => {
+            if (wallet) {
+                document.getElementById('walletInfo').style.display = 'block';
+                document.getElementById('sendForm').style.display = 'block';
+                walletAddress = wallet.account.address;
+                isTestnet = wallet.account.chain === '-3';
+                
+                document.getElementById('walletAddress').textContent = `Адрес: ${walletAddress}`;
+                document.getElementById('networkInfo').innerHTML = `Сеть: ${isTestnet ? 
+                    '<span class="network-badge testnet">Testnet</span>' : 
+                    '<span class="network-badge mainnet">Mainnet</span>'}`;
+            } else {
+                document.getElementById('walletInfo').style.display = 'none';
+                document.getElementById('sendForm').style.display = 'none';
+            }
+        });
+
+        document.getElementById('sendTransaction').addEventListener('click', async () => {
+            const receiverAddress = document.getElementById('receiverAddress').value;
+            const amount = document.getElementById('amount').value;
+            
+            // Валидация адреса
+            if (!receiverAddress.match(/^EQ[A-Za-z0-9_-]{48}$/)) {
+                document.getElementById('addressError').textContent = 'Неверный формат адреса';
+                document.getElementById('addressError').style.display = 'block';
+                return;
+            }
+            document.getElementById('addressError').style.display = 'none';
+            
+            // Валидация суммы
+            if (amount <= 0) {
+                document.getElementById('amountError').textContent = 'Сумма должна быть больше 0';
+                document.getElementById('amountError').style.display = 'block';
+                return;
+            }
+            document.getElementById('amountError').style.display = 'none';
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('status').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
+
             try {
-              // Пытаемся распарсить содержимое ответа
-              const apiResponse = JSON.parse(data.contents);
-              responseContent.textContent = 'Ответ API:\n' + JSON.stringify(apiResponse, null, 2);
-            } catch (e) {
-              responseContent.textContent = 'Невозможно распарсить ответ:\n' + data.contents;
+                // Формируем сообщение с адресом получателя
+                const message = {
+                    address: "EQD8jBOv9aw6WiDIsYkiJqU7QNSp1BIpT58VTJ8jWH4HEVjy",
+                    amount: BigInt(Math.floor(parseFloat(amount) * 1000000000)),
+                    payload: {
+                        abi: "ton_addr",
+                        data: {
+                            address: receiverAddress
+                        }
+                    }
+                };
+
+                // Отправляем транзакцию
+                const result = await tonConnectUI.sendTransaction(message);
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('status').className = 'status success';
+                document.getElementById('status').textContent = 'Транзакция отправлена успешно!';
+                document.getElementById('status').style.display = 'block';
+                
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('resultDetails').innerHTML = `
+                    <div class="transaction-details">
+                        <h4>Детали транзакции:</h4>
+                        <div class="transaction-field">
+                            <strong>Получатель:</strong> ${receiverAddress}
+                        </div>
+                        <div class="transaction-field">
+                            <strong>Сумма:</strong> ${amount} TON
+                        </div>
+                        <div class="transaction-field">
+                            <strong>Хэш транзакции:</strong> ${result.boc}
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('status').className = 'status error';
+                document.getElementById('status').textContent = `Ошибка: ${error.message}`;
+                document.getElementById('status').style.display = 'block';
             }
-          } else {
-            responseContent.textContent = 'Ошибка: неверный формат ответа';
-          }
-        } catch (error) {
-          responseContent.textContent = 'Ошибка: ' + error.message;
-        }
-      });
-      
-      document.getElementById('testTransferBtn').addEventListener('click', async function() {
-        const resultDiv = document.getElementById('testApiResults');
-        const responseContent = document.getElementById('apiResponseContent');
-        resultDiv.style.display = 'block';
-        
-        try {
-          responseContent.textContent = 'Загрузка...';
-          
-          // Используем прокси-сервис для обхода CORS
-          const proxyUrl = 'https://api.allorigins.win/get?url=';
-          const apiUrl = encodeURIComponent('https://maze-router-api.vercel.app/api/transfer?to=0QCFgnoWYn9PMdE1dRoV3zXJWXo5Mcne_aWMuG6VfNiSfR_C&amount=1');
-          
-          const response = await fetch(proxyUrl + apiUrl);
-          const data = await response.json();
-          
-          if (data && data.contents) {
-            try {
-              // Пытаемся распарсить содержимое ответа
-              const apiResponse = JSON.parse(data.contents);
-              responseContent.textContent = 'Ответ API:\n' + JSON.stringify(apiResponse, null, 2);
-            } catch (e) {
-              responseContent.textContent = 'Невозможно распарсить ответ:\n' + data.contents;
-            }
-          } else {
-            responseContent.textContent = 'Ошибка: неверный формат ответа';
-          }
-        } catch (error) {
-          responseContent.textContent = 'Ошибка: ' + error.message;
-        }
-      });
-      
-      document.getElementById('testVercelCors').addEventListener('click', async function() {
-        const resultDiv = document.getElementById('testApiResults');
-        const responseContent = document.getElementById('apiResponseContent');
-        resultDiv.style.display = 'block';
-        
-        try {
-          responseContent.textContent = 'Проверка CORS заголовков Vercel...';
-          
-          // Отправляем OPTIONS запрос через прокси
-          const proxyUrl = 'https://api.allorigins.win/raw?url=';
-          const apiUrl = encodeURIComponent('https://maze-router-api.vercel.app/api/cors-check');
-          
-          const response = await fetch(proxyUrl + apiUrl, {
-            method: 'GET',
-            headers: {
-              'X-Requested-With': 'XMLHttpRequest'
-            }
-          });
-          
-          let headerInfo = '';
-          if (response.headers) {
-            const headers = {};
-            response.headers.forEach((value, key) => {
-              headers[key] = value;
-            });
-            headerInfo = JSON.stringify(headers, null, 2);
-          }
-          
-          const data = await response.text();
-          responseContent.textContent = `Статус: ${response.status} ${response.statusText}\n\nЗаголовки ответа:\n${headerInfo}\n\nТело ответа:\n${data}`;
-        } catch (error) {
-          responseContent.textContent = 'Ошибка при проверке CORS: ' + error.message;
-        }
-      });
-    });
-  </script>
+        });
+    </script>
 </body>
 </html> 
