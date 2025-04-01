@@ -1,251 +1,314 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Maze Router - TON Transaction Router"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>Maze Router</title>
-    
-    <!-- Backend API сервис с поддержкой CORS -->
-    <script>
-      // Адрес API
-      const API_URL = 'https://maze-router-api.vercel.app/api';
-      
-      // Создаем скрытый iframe для выполнения запросов в другом домене
-      function createHiddenIframe() {
-        const iframe = document.createElement('iframe');
-        iframe.id = 'mazeRouterIframe';
-        iframe.style.display = 'none';
-        document.body.appendChild(iframe);
-        
-        // Возвращаем Promise, который разрешится, когда iframe загрузится
-        return new Promise((resolve) => {
-          iframe.onload = () => resolve(iframe);
-          iframe.src = 'about:blank';
-        });
-      }
-      
-      // Доступные серверы-посредники, которые разрешают CORS
-      const PROXY_URLS = [
-        'https://cors.bridged.cc/',
-        'https://thingproxy.freeboard.io/fetch/',
-        'https://crossorigin.me/',
-        'https://api.codetabs.com/v1/proxy?quest=',
-        'https://cors-proxy.htmldriven.com/?url=',
-        'https://corsproxy.io/?'
-      ];
-      
-      // Получить случайный прокси
-      function getRandomProxy() {
-        const index = Math.floor(Math.random() * PROXY_URLS.length);
-        return PROXY_URLS[index];
-      }
-      
-      // Функция для обхода CORS с помощью сторонних сервисов
-      async function fetchViaProxy(url, options = {}) {
-        for (let i = 0; i < PROXY_URLS.length; i++) {
-          const proxy = PROXY_URLS[i];
-          try {
-            console.log(`Пробуем прокси ${i+1}/${PROXY_URLS.length}: ${proxy}`);
-            
-            const proxyUrl = `${proxy}${url}`;
-            const response = await fetch(proxyUrl, options);
-            
-            if (!response.ok) {
-              throw new Error(`HTTP ошибка: ${response.status}`);
-            }
-            
-            return await response.json();
-          } catch (error) {
-            console.warn(`Ошибка через прокси ${proxy}:`, error);
-            // Если это последний прокси, выбрасываем ошибку
-            if (i === PROXY_URLS.length - 1) {
-              throw new Error('Все доступные прокси-серверы не работают');
-            }
-            // Иначе пробуем следующий
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze - TON Router</title>
+    <link rel="icon" href="favicon.ico" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #45AEF5;
+            --primary-hover: #3498db;
+            --bg-dark: #0F1419;
+            --bg-card: #1A1F25;
+            --text-primary: #fff;
+            --text-secondary: #B4B8BC;
+            --border-color: #2D3239;
+            --error-color: #FF4B55;
+            --success-color: #4CAF50;
         }
-      }
-      
-      // Функция для использования JSONP (для GET запросов)
-      function jsonp(url, callback) {
-        const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-        window[callbackName] = function(data) {
-          delete window[callbackName];
-          document.body.removeChild(script);
-          callback(data);
-        };
 
-        const script = document.createElement('script');
-        script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
-        document.body.appendChild(script);
-      }
-      
-      // Наш собственный бэкенд для байпаса CORS - фактически просто позволит нам проверить работу
-      // без необходимости реальной интеграции с API
-      const mockApiResponses = {
-        calculate: function(amount) {
-          const intAmount = parseInt(amount, 10);
-          if (isNaN(intAmount) || intAmount <= 0) {
-            return { error: 'Некорректная сумма' };
-          }
-          
-          // Расчет комиссии: 0.5% от суммы, минимум 0.01 TON
-          const commission = Math.max(intAmount * 0.005, 0.01);
-          const total = intAmount + commission;
-          
-          return {
-            amount: intAmount,
-            commission: commission.toFixed(2),
-            total: total.toFixed(2)
-          };
-        },
-        
-        transfer: function(to, amount) {
-          const intAmount = parseInt(amount, 10);
-          if (isNaN(intAmount) || intAmount <= 0) {
-            return { error: 'Некорректная сумма' };
-          }
-          
-          if (!to || !to.match(/^[0-9a-zA-Z_-]{48}$/)) {
-            return { error: 'Некорректный адрес получателя' };
-          }
-          
-          // Формируем фиктивную информацию о транзакции
-          const txid = 'tx_' + Math.random().toString(36).substring(2, 15);
-          const commission = Math.max(intAmount * 0.005, 0.01);
-          
-          return {
-            success: true,
-            txid: txid,
-            to: to,
-            amount: intAmount,
-            commission: commission.toFixed(2),
-            total: (intAmount + commission).toFixed(2),
-            status: 'pending',
-            timestamp: new Date().toISOString()
-          };
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0F1419 0%, #1A1F25 100%);
         }
-      };
 
-      // Глобальный объект для работы с API
-      window.DirectMazeAPI = {
-        // Функция для расчета комиссии
-        calculateCommission: async function(amount) {
-          console.log('DirectMazeAPI.calculateCommission вызван с суммой:', amount);
-          
-          try {
-            // 1. Сначала пробуем с прокси-серверами
-            try {
-              const url = `${API_URL}/calculate`;
-              const result = await fetchViaProxy(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount })
-              });
-              console.log('Результат через прокси:', result);
-              return result;
-            } catch (proxyError) {
-              console.warn('Не удалось использовать прокси:', proxyError);
-              
-              // 2. Пробуем с JSONP
-              try {
-                return new Promise((resolve, reject) => {
-                  const jsonpUrl = `${API_URL}/calculate?amount=${amount}&jsonp=true`;
-                  
-                  jsonp(jsonpUrl, function(data) {
-                    console.log('Результат через JSONP:', data);
-                    resolve(data);
-                  });
-                  
-                  // Таймаут для JSONP
-                  setTimeout(() => {
-                    reject(new Error('JSONP timeout'));
-                  }, 5000);
-                });
-              } catch (jsonpError) {
-                console.warn('Не удалось использовать JSONP:', jsonpError);
-                
-                // 3. В крайнем случае используем мок
-                console.log('Используем мок для расчета комиссии');
-                return mockApiResponses.calculate(amount);
-              }
-            }
-          } catch (error) {
-            console.error('Все методы запроса не удались:', error);
-            // В любом случае возвращаем хоть какой-то ответ
-            return mockApiResponses.calculate(amount);
-          }
-        },
-        
-        // Функция для подготовки транзакции
-        prepareTransfer: async function(to, amount) {
-          console.log('DirectMazeAPI.prepareTransfer вызван:', { to, amount });
-          
-          try {
-            // 1. Сначала пробуем с прокси-серверами
-            try {
-              const url = `${API_URL}/transfer`;
-              const result = await fetchViaProxy(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ to, amount })
-              });
-              console.log('Результат через прокси:', result);
-              return result;
-            } catch (proxyError) {
-              console.warn('Не удалось использовать прокси:', proxyError);
-              
-              // 2. Используем мок
-              console.log('Используем мок для транзакции');
-              return mockApiResponses.transfer(to, amount);
-            }
-          } catch (error) {
-            console.error('Все методы запроса не удались:', error);
-            // В любом случае возвращаем хоть какой-то ответ
-            return mockApiResponses.transfer(to, amount);
-          }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
         }
-      };
-      
-      // Инициализируем MazeRouterProxy для совместимости
-      window.MazeRouterProxy = window.DirectMazeAPI;
-      
-      console.log('DirectMazeAPI и MazeRouterProxy успешно инициализированы с резервным моком');
-    </script>
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .maze-logo {
+            font-size: 72px;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 6px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            position: relative;
+            text-shadow: 0 0 30px rgba(69, 174, 245, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px rgba(69, 174, 245, 0.3);
+            }
+            to {
+                text-shadow: 0 0 30px rgba(69, 174, 245, 0.6);
+            }
+        }
+
+        .maze-logo::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+            box-shadow: 0 0 20px rgba(69, 174, 245, 0.5);
+            animation: lineWidth 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes lineWidth {
+            from {
+                width: 60px;
+            }
+            to {
+                width: 100px;
+            }
+        }
+
+        .maze-icon {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            position: relative;
+            margin-top: 40px;
+        }
+
+        .maze-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 3px solid var(--primary-color);
+            border-radius: 8px;
+            animation: mazeDraw 3s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(69, 174, 245, 0.3);
+        }
+
+        @keyframes mazeDraw {
+            0% {
+                clip-path: polygon(0 0, 0 0, 0 0);
+                opacity: 0.3;
+            }
+            25% {
+                clip-path: polygon(0 0, 100% 0, 100% 0);
+                opacity: 0.6;
+            }
+            50% {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+                opacity: 0.8;
+            }
+            75% {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 50%);
+                opacity: 1;
+            }
+            100% {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 50%, 50% 50%);
+                opacity: 1;
+            }
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 40px;
+            animation: fadeIn 1s ease-out 0.5s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .description {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.6;
+            max-width: 700px;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+            color: white;
+            text-decoration: none;
+            padding: 20px 50px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(69, 174, 245, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(69, 174, 245, 0.3);
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 80px;
+            flex-wrap: wrap;
+            padding: 0 20px;
+            max-width: 1200px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(26, 31, 37, 0.8) 0%, rgba(45, 50, 57, 0.8) 100%);
+            border-radius: 20px;
+            padding: 40px;
+            width: 300px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            animation: fadeIn 1s ease-out 1s both;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary-color);
+        }
+
+        .feature-card h3 {
+            color: var(--primary-color);
+            margin: 0 0 20px 0;
+            font-size: 24px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .feature-card h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 2px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .maze-logo {
+                font-size: 48px;
+            }
+            
+            .description {
+                font-size: 18px;
+            }
+            
+            .feature-card {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .cta-button {
+                padding: 15px 30px;
+                font-size: 18px;
+            }
+        }
+    </style>
   </head>
   <body>
-    <noscript>Вам необходимо включить JavaScript для запуска приложения.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    <div class="logo-container">
+        <div class="maze-logo">MAZE</div>
+        <div class="maze-icon"></div>
+    </div>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+    <div class="container">
+        <p class="description">
+            Безопасный и быстрый способ маршрутизации транзакций в сети TON.<br>
+            Минимальная комиссия, максимальная скорость.
+        </p>
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+        <a href="ton-connect.html" class="cta-button">Начать работу</a>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>Безопасность</h3>
+                <p>Все транзакции проходят через смарт-контракт с открытым исходным кодом. Полная прозрачность и надежность операций.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Скорость</h3>
+                <p>Мгновенная обработка и отправка транзакций в сети TON. Ваши переводы выполняются за считанные секунды.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Комиссия</h3>
+                <p>Минимальная комиссия всего 0.2% от суммы перевода. Прозрачные тарифы без скрытых платежей.</p>
+            </div>
+        </div>
+    </div>
   </body>
 </html> 
